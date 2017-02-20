@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--文字背景遮罩效果-->
+    <gradient
+        android:angle="90"
+        android:endColor="#4d000000"
+        android:startColor="#8d000000"
+        android:type="linear"
+        ></gradient>
+
+</shape>

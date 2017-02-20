@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
+        <!--设置Toolbar的高度-->
+        <item name="android:actionBarSize">46dp</item>
+    </style>
+
+</resources>
