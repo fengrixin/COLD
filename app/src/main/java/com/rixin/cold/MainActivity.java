@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     private View headerView;
     private Toolbar mToolbar;
     private long firstTime;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,12 +181,14 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_everyday) {
             setImageTextVisibility(false);
+            fab.setVisibility(View.GONE);
             mTitle.setText(R.string.nav_everyday);
             mFragment = FragmentFactory.createFragment(FragmentFactory.EVERYDAY_FRAGMENT);
             this.getSupportFragmentManager().beginTransaction().replace(R.id.content_main, mFragment).commit();
             Toast.makeText(UIUtils.getContext(), R.string.nav_everyday, Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_image_txt) {
             setImageTextVisibility(true);
+            fab.setVisibility(View.VISIBLE);
             mTitle.setText(R.string.nav_image_txt);
             mViewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager()));
             mTabs.setupWithViewPager(mViewPager);
@@ -192,6 +196,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().remove(mFragment).commit();
         } else if (id == R.id.nav_video) {
             setImageTextVisibility(false);
+            fab.setVisibility(View.VISIBLE);
             mTitle.setText(R.string.nav_video);
             mFragment = FragmentFactory.createFragment(FragmentFactory.VIDEO_FRAGMENT);
             this.getSupportFragmentManager().beginTransaction().replace(R.id.content_main, mFragment).commit();
