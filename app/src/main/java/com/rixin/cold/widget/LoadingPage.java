@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.rixin.cold.R;
 import com.rixin.cold.utils.ThreadManager;
@@ -57,7 +56,10 @@ public abstract class LoadingPage extends FrameLayout {
             errorPage.findViewById(R.id.btn_load_again).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(UIUtils.getContext(), "加载中...", Toast.LENGTH_SHORT).show();
+                    loadData();
+                    //显示加载中页面
+                    currentState = STATE_LOAD_LOADING;
+                    showRightPage();
                 }
             });
             addView(errorPage);
@@ -68,7 +70,10 @@ public abstract class LoadingPage extends FrameLayout {
             emptyPage.findViewById(R.id.iv_load_again).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(UIUtils.getContext(), "记载中...", Toast.LENGTH_SHORT).show();
+                    loadData();
+                    //显示加载中页面
+                    currentState = STATE_LOAD_LOADING;
+                    showRightPage();
                 }
             });
             addView(emptyPage);

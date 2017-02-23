@@ -4,8 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.rixin.cold.R;
+import com.rixin.cold.domain.ColdInfo;
+import com.rixin.cold.utils.UIUtils;
 
 import java.util.ArrayList;
 
@@ -16,9 +21,9 @@ import java.util.ArrayList;
 
 public class TabsRecyclerViewAdapter extends RecyclerView.Adapter<TabsRecyclerViewAdapter.TabsViewHolder> {
 
-    private ArrayList<String> data;
+    private ArrayList<ColdInfo> data;
 
-    public TabsRecyclerViewAdapter(ArrayList<String> data) {
+    public TabsRecyclerViewAdapter(ArrayList<ColdInfo> data) {
         this.data = data;
     }
 
@@ -34,6 +39,8 @@ public class TabsRecyclerViewAdapter extends RecyclerView.Adapter<TabsRecyclerVi
 
     @Override
     public void onBindViewHolder(TabsViewHolder holder, int position) {
+        Glide.with(UIUtils.getContext()).load(data.get(position).picUrl).asBitmap().into(holder.pic);
+        holder.title.setText(data.get(position).title);
     }
 
     @Override
@@ -42,8 +49,14 @@ public class TabsRecyclerViewAdapter extends RecyclerView.Adapter<TabsRecyclerVi
     }
 
     public class TabsViewHolder extends RecyclerView.ViewHolder {
+        private ImageView pic;
+        private TextView time;
+        private TextView title;
         public TabsViewHolder(View itemView) {
             super(itemView);
+            pic = (ImageView) itemView.findViewById(R.id.iv_tabs_list_pic);
+            time = (TextView) itemView.findViewById(R.id.tv_tabs_list_time);
+            title = (TextView) itemView.findViewById(R.id.tv_tabs_list_title);
         }
     }
 }
