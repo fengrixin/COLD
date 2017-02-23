@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     private View headerView;
     private Toolbar mToolbar;
     private long firstTime;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
