@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.rixin.cold.R;
 import com.rixin.cold.utils.ThreadManager;
@@ -22,14 +21,12 @@ public abstract class LoadingPage extends FrameLayout {
     private static final int STATE_LOAD_UNDO = 1;  //未加载
     private static final int STATE_LOAD_LOADING = 2;  //加载中
     private static final int STATE_LOAD_FAILURE = 3;  //加载失败
-    private static final int STATE_LOAD_EMPTY = 4;  //数据为空
-    private static final int STATE_LOAD_SUCCESS = 5;  //加载成功
+    private static final int STATE_LOAD_SUCCESS = 4;  //加载成功
 
     private int currentState = STATE_LOAD_UNDO;  //当前状态
 
     private View loadingPage;  //加载中页面
     private View errorPage;  //加载失败页面
-    private View emptyPage;  //数据为空页面
     private View successPage;  //加载成功页面
 
     public LoadingPage(Context context) {
@@ -57,21 +54,13 @@ public abstract class LoadingPage extends FrameLayout {
             errorPage.findViewById(R.id.btn_load_again).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(UIUtils.getContext(), "加载中...", Toast.LENGTH_SHORT).show();
+                    loadData();
+                    //显示加载中页面
+                    currentState = STATE_LOAD_LOADING;
+                    showRightPage();
                 }
             });
             addView(errorPage);
-        }
-        //////////////// 初始化数据为空的布局 ///////////////////
-        if (emptyPage == null) {
-            emptyPage = UIUtils.inflate(R.layout.page_empty);
-            emptyPage.findViewById(R.id.iv_load_again).setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(UIUtils.getContext(), "记载中...", Toast.LENGTH_SHORT).show();
-                }
-            });
-            addView(emptyPage);
         }
 
         showRightPage();
@@ -80,7 +69,6 @@ public abstract class LoadingPage extends FrameLayout {
     private void showRightPage() {
         loadingPage.setVisibility((currentState == STATE_LOAD_UNDO || currentState == STATE_LOAD_LOADING) ? View.VISIBLE : View.GONE);
         errorPage.setVisibility(currentState == STATE_LOAD_FAILURE ? View.VISIBLE : View.GONE);
-        emptyPage.setVisibility(currentState == STATE_LOAD_EMPTY ? View.VISIBLE : View.GONE);
 
         // 当前布局为空并且当前状态为加载成功才初始化成功界面
         if (successPage == null && currentState == STATE_LOAD_SUCCESS) {
@@ -144,7 +132,6 @@ public abstract class LoadingPage extends FrameLayout {
      */
     public enum ResultState {
         STATE_SUCCESS(STATE_LOAD_SUCCESS),
-        STATE_EMPTY(STATE_LOAD_EMPTY),
         STATE_ERROR(STATE_LOAD_FAILURE);
 
         private int state;

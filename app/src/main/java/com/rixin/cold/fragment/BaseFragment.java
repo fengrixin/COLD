@@ -68,7 +68,7 @@ public abstract class BaseFragment extends Fragment {
             if (object instanceof ArrayList) {  //判断是否是集合
                 ArrayList list = (ArrayList) object;
                 if (list.isEmpty()) {
-                    return LoadingPage.ResultState.STATE_EMPTY;
+                    return LoadingPage.ResultState.STATE_ERROR;
                 } else {
                     return LoadingPage.ResultState.STATE_SUCCESS;
                 }

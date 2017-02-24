@@ -10,12 +10,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.rixin.cold.R;
 import com.rixin.cold.domain.ColdDetailsInfo;
 import com.rixin.cold.global.GlobalConstants;
+import com.rixin.cold.utils.CacheUtils;
 import com.rixin.cold.utils.RandomUtils;
 import com.rixin.cold.utils.SPUtils;
 import com.rixin.cold.utils.UIUtils;
 import com.rixin.cold.widget.LoadingPage;
 
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,7 +31,7 @@ import java.util.Date;
 
 public class EverydayFragment extends BaseFragment {
 
-    private ColdDetailsInfo detailsInfo;
+    private ColdDetailsInfo mDetailsInfo;
     private ImageView mPic;
     private ImageView mArrow;
     private TextView mTextArrow;
@@ -45,7 +45,6 @@ public class EverydayFragment extends BaseFragment {
     // 当前要显示的页面
     private final static int SUCCESS = 0;
     private final static int ERROR = 1;
-    private final static int EMPTY = 2;
     private int currentState = SUCCESS;
 
     @Override
@@ -60,21 +59,21 @@ public class EverydayFragment extends BaseFragment {
         mRead = (TextView) view.findViewById(R.id.tv_everyday_read);
         mStar = (TextView) view.findViewById(R.id.tv_everyday_star);
 
-        if (detailsInfo != null) {
-            Glide.with(UIUtils.getContext()).load(detailsInfo.picUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_thumb_bg).into(mPic);
-            mTitle.setText(detailsInfo.title);
-            mContent.setText(Html.fromHtml(detailsInfo.pContent.toString()));
+        if (mDetailsInfo != null) {
+            Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_thumb_bg).into(mPic);
+            mTitle.setText(mDetailsInfo.title);
+            mContent.setText(Html.fromHtml(mDetailsInfo.pContent.toString()));
             mArrow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mContent.setMaxLines(1000);
+                    mContent.setMaxLines(1500);
                     mArrow.setVisibility(View.GONE);
                     mTextArrow.setVisibility(View.GONE);
                 }
             });
             mTime.setText("发布时间：" + getCurrentDate());
-            mRead.setText("阅读(" + RandomUtils.getReadRandom() + ")");
-            mStar.setText("赞(" + RandomUtils.getStarRandom() + ")");
+            mRead.setText("阅读(" + mDetailsInfo.read + ")");
+            mStar.setText("赞(" + mDetailsInfo.star + ")");
         }
 
         return view;
@@ -82,30 +81,35 @@ public class EverydayFragment extends BaseFragment {
 
     @Override
     public LoadingPage.ResultState onLoadData() {
-        // 加载服务器的数据
-        getServiceData();
+
+        // 首先加载缓存，如果缓存为空，则访问网络
+        mDetailsInfo = CacheUtils.getEverydayCache();
+        if(mDetailsInfo == null){
+            // 加载服务器的数据
+            mDetailsInfo = getServiceData();
+        }
 
         String currentTime = SPUtils.getString(UIUtils.getContext(), GlobalConstants.EVERYDAY_CURRENT_TIME, getCurrentDate());
         // 判断当前日期和上次打开的日期是否一致，如果不一致则加载下一篇文章
-        if(!currentTime.equals(getCurrentDate())){
+        if (!currentTime.equals(getCurrentDate())) {
             SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_CURRENT_TIME, getCurrentDate());
-            SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_URL_KEY, detailsInfo.nextUrl);
+            SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_URL_KEY, mDetailsInfo.nextUrl);
+            // 加载下一篇图文的服务器数据
+            mDetailsInfo = getServiceData();
         }
 
         // 加载对应的页面
         if (currentState == SUCCESS) {
-            SPUtils.setString(UIUtils.getContext(),GlobalConstants.EVERYDAY_CURRENT_TIME,getCurrentDate());
+            SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_CURRENT_TIME, getCurrentDate());
             return LoadingPage.ResultState.STATE_SUCCESS;
-        } else if (currentState == EMPTY) {
-            return LoadingPage.ResultState.STATE_EMPTY;
         } else if (currentState == ERROR) {
             return LoadingPage.ResultState.STATE_ERROR;
         }
         return null;
     }
 
-    private void getServiceData() {
-        detailsInfo = new ColdDetailsInfo();
+    private ColdDetailsInfo getServiceData() {
+        ColdDetailsInfo detailsInfo = new ColdDetailsInfo();
         try {
             // 从一个URL加载一个Document对象
             document = nextImageText(SPUtils.getString(UIUtils.getContext(), GlobalConstants.EVERYDAY_URL_KEY, GlobalConstants.EVERYDAY_SERVICE_URL));
@@ -129,15 +133,26 @@ public class EverydayFragment extends BaseFragment {
                     }
                     sb.append("\u3000\u3000" + elements.get(i).html() + "<br/>");
                 }
-                detailsInfo.pContent = sb;
+                detailsInfo.pContent = sb.toString();
+                // 选择上一篇所在的节点
+                element = document.select(".article-nav-prev a").first();
+                if (element != null) {
+                    detailsInfo.prevUrl = element.attr("href");
+                }
                 // 选择下一篇所在的节点
                 element = document.select(".article-nav-next a").first();
                 detailsInfo.nextUrl = element.attr("href");
+                // 设置阅读数
+                detailsInfo.read = RandomUtils.getReadRandom();
+                // 设置赞数
+                detailsInfo.star = RandomUtils.getStarRandom();
             }
         } catch (Exception e) {
             e.printStackTrace();
             currentState = ERROR;
         }
+        CacheUtils.setEverydayCache(detailsInfo.toString());
+        return detailsInfo;
     }
 
     /**
@@ -160,12 +175,7 @@ public class EverydayFragment extends BaseFragment {
             return d;
         } catch (Exception e) {
             e.printStackTrace();
-            HttpStatusException ex = new HttpStatusException("HTTP error fetching URL", 404, url);
-            if (ex != null) {
-                currentState = EMPTY;
-            } else {
-                currentState = ERROR;
-            }
+            currentState = ERROR;
         }
         return null;
     }
