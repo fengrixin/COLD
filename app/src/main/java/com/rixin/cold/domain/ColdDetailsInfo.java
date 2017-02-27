@@ -1,6 +1,7 @@
 package com.rixin.cold.domain;
 
 /**
+ * 详情页的JavaBean
  * Created by 飘渺云轩 on 2017/2/13.
  */
 
@@ -16,6 +17,6 @@ public class ColdDetailsInfo {
 
     @Override
     public String toString() {
-        return title + ",," + picUrl + ",," + pContent + ",," + prevUrl + ",," + nextUrl + ",," + read + ",," + star;
+        return title + "-IOU-" + picUrl + "-IOU-" + pContent + "-IOU-" + prevUrl + "-IOU-" + nextUrl + "-IOU-" + read + "-IOU-" + star;
     }
 }

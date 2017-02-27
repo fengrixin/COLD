@@ -1,12 +1,15 @@
 package com.rixin.cold.utils;
 
 import com.rixin.cold.domain.ColdDetailsInfo;
+import com.rixin.cold.domain.ColdInfo;
+import com.rixin.cold.global.GlobalConstants;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * 缓存工具
@@ -16,13 +19,13 @@ import java.io.IOException;
 public class CacheUtils {
 
     /**
-     * 写每日一冷的缓存
+     * 写缓存，以EverydayCache为文件名，ColdDetailsInfo.toString()为内容，保存到本应用的缓存目录中
      *
      * @param str
      */
-    public static void setEverydayCache(String str) {
+    public static void setCache(String key, String str) {
         File cacheDir = UIUtils.getContext().getCacheDir();  // 获取缓存目录
-        File cacheFile = new File(cacheDir, "EverydayCache");  //生成缓存文件
+        File cacheFile = new File(cacheDir, key);  //生成缓存文件
         FileWriter writer = null;
         try {
             writer = new FileWriter(cacheFile);
@@ -36,13 +39,14 @@ public class CacheUtils {
     }
 
     /**
-     * 获取每日一冷的缓存
+     * 获取每日一冷的缓存，并对其内容进行解析，返回ColdDetailsInfo对象
      *
      * @return
      */
     public static ColdDetailsInfo getEverydayCache() {
+        ColdDetailsInfo detailsInfo = null;
         File cacheDir = UIUtils.getContext().getCacheDir();  // 获取缓存目录
-        File cacheFile = new File(cacheDir, "EverydayCache");  //获得缓存文件
+        File cacheFile = new File(cacheDir, GlobalConstants.EVERYDAY_CACHE_KEY);  //获得缓存文件
         if (cacheFile.exists()) {
             BufferedReader reader = null;
             try {
@@ -53,11 +57,11 @@ public class CacheUtils {
                     sb.append(line);
                 }
                 String str = sb.toString();
-                if(str == null || str == ""){
+                if (str == null || str == "" || str.isEmpty()) {
                     return null;
                 }
-                String[] strs = str.split(",,");
-                ColdDetailsInfo detailsInfo = new ColdDetailsInfo();
+                detailsInfo = new ColdDetailsInfo();
+                String[] strs = str.split("-IOU-");
                 if (strs.length == 7) {
                     detailsInfo.title = strs[0];
                     detailsInfo.picUrl = strs[1];
@@ -67,66 +71,43 @@ public class CacheUtils {
                     detailsInfo.read = Integer.parseInt(strs[5]);
                     detailsInfo.star = Integer.parseInt(strs[6]);
                 }
-                return detailsInfo;
             } catch (IOException e) {
                 e.printStackTrace();
-                return null;
             } finally {
                 IOUtils.close(reader);
             }
         }
-        return null;
-    }
-
-    /**
-     * 写缓存，以url为文件名，以json为文件内容，保存在本应用的缓存目录中
-     *
-     * @param index
-     * @param json
-     */
-    public void setCache(int index, String json) {
-        File cacheDir = UIUtils.getContext().getCacheDir(); // 获取缓存目录
-        // 生成缓存文件
-        File cacheFile = new File(cacheDir, "");
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(cacheFile);
-            // 缓存失效的截止日期
-            long deadLine = System.currentTimeMillis() + 30 * 60 * 1000;
-            writer.write(deadLine + "\n"); // 在第一行写入缓存时间，并换行
-            writer.write(json); // 写入json
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.close(writer);
-        }
+        return detailsInfo;
     }
 
     /**
      * 获取缓存
      *
-     * @param index
+     * @param cacheFileName
      * @return
      */
-    public String getCache(int index) {
+    public static ArrayList<ColdInfo> getCache(String cacheFileName) {
+        ArrayList<ColdInfo> data = null;
         File cacheDir = UIUtils.getContext().getCacheDir(); // 获取缓存目录
         // 获得缓存文件
-        File cacheFile = new File(cacheDir, "");
+        File cacheFile = new File(cacheDir, cacheFileName);
         if (cacheFile.exists()) {
             BufferedReader reader = null;
             try {
                 reader = new BufferedReader(new FileReader(cacheFile));
-                String readLine = reader.readLine();  //读取第一行的deadLine
-                long deadLine = Long.parseLong(readLine);
-
-                if (System.currentTimeMillis() < deadLine) { // 缓存有效
-                    StringBuffer sb = new StringBuffer();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line);
+                data = new ArrayList<>();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    ColdInfo info = new ColdInfo();
+                    String[] strs = line.split("-IOU-");
+                    for (int i = 0; i < strs.length; i++) {
+                        info.title = strs[0];
+                        info.picUrl = strs[1];
+                        info.contentUrl = strs[2];
+                        info.readCount = Integer.parseInt(strs[3]);
+                        info.starCount = Integer.parseInt(strs[4]);
                     }
-                    return sb.toString();
+                    data.add(info);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -134,7 +115,7 @@ public class CacheUtils {
                 IOUtils.close(reader);
             }
         }
-        return null;
+        return data;
     }
 
 }

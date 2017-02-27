@@ -20,7 +20,23 @@ public class VideoFragment extends BaseFragment {
     public View onCreateSuccessPage() {
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL);
         VideoRecyclerViewAdapter adapter = new VideoRecyclerViewAdapter(getTestList());
-        MyRecyclerView myRecyclerView = new MyRecyclerView(manager, adapter);
+        MyRecyclerView myRecyclerView = new MyRecyclerView(manager, adapter){
+
+            @Override
+            public void onItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onRefresh() {
+
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        };
         return myRecyclerView.getView();
     }
 

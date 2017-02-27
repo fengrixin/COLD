@@ -41,4 +41,7 @@
         <item>名人</item>
     </string-array>
 
+    <string name="title_activity_details">详情阅读</string>
+    <string name="action_settings">Settings</string>
+
 </resources>

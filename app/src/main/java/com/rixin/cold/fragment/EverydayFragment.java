@@ -21,9 +21,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * 每日一冷
  * Created by 飘渺云轩 on 2017/2/5.
@@ -32,6 +29,7 @@ import java.util.Date;
 public class EverydayFragment extends BaseFragment {
 
     private ColdDetailsInfo mDetailsInfo;
+    private Document document;
     private ImageView mPic;
     private ImageView mArrow;
     private TextView mTextArrow;
@@ -40,7 +38,6 @@ public class EverydayFragment extends BaseFragment {
     private TextView mTime;
     private TextView mRead;
     private TextView mStar;
-    private Document document;
 
     // 当前要显示的页面
     private final static int SUCCESS = 0;
@@ -61,8 +58,8 @@ public class EverydayFragment extends BaseFragment {
 
         if (mDetailsInfo != null) {
             Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_thumb_bg).into(mPic);
-            mTitle.setText(mDetailsInfo.title);
-            mContent.setText(Html.fromHtml(mDetailsInfo.pContent.toString()));
+            mTitle.setText(mDetailsInfo.title + "?");
+            mContent.setText(Html.fromHtml(mDetailsInfo.pContent));
             mArrow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -82,37 +79,37 @@ public class EverydayFragment extends BaseFragment {
     @Override
     public LoadingPage.ResultState onLoadData() {
 
-        // 首先加载缓存，如果缓存为空，则访问网络
-        mDetailsInfo = CacheUtils.getEverydayCache();
-        if(mDetailsInfo == null){
-            // 加载服务器的数据
-            mDetailsInfo = getServiceData();
-        }
-
-        String currentTime = SPUtils.getString(UIUtils.getContext(), GlobalConstants.EVERYDAY_CURRENT_TIME, getCurrentDate());
+        String beforeTime = SPUtils.getString(UIUtils.getContext(), GlobalConstants.BEFORE_TIME_KEY, getCurrentDate());
         // 判断当前日期和上次打开的日期是否一致，如果不一致则加载下一篇文章
-        if (!currentTime.equals(getCurrentDate())) {
-            SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_CURRENT_TIME, getCurrentDate());
-            SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_URL_KEY, mDetailsInfo.nextUrl);
+        if (!beforeTime.equals(getCurrentDate())) {
+            SPUtils.setString(UIUtils.getContext(), GlobalConstants.BEFORE_TIME_KEY, getCurrentDate());
+            SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_NEXT_URL_KEY, mDetailsInfo.nextUrl);
             // 加载下一篇图文的服务器数据
             mDetailsInfo = getServiceData();
+        } else {
+            // 首先加载缓存，如果缓存为空，则访问网络
+            mDetailsInfo = CacheUtils.getEverydayCache();
+            if (mDetailsInfo == null) {
+                // 加载服务器的数据
+                mDetailsInfo = getServiceData();
+            } else {
+                currentState = SUCCESS;
+            }
         }
 
         // 加载对应的页面
         if (currentState == SUCCESS) {
-            SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_CURRENT_TIME, getCurrentDate());
+            SPUtils.setString(UIUtils.getContext(), GlobalConstants.BEFORE_TIME_KEY, getCurrentDate());
             return LoadingPage.ResultState.STATE_SUCCESS;
-        } else if (currentState == ERROR) {
-            return LoadingPage.ResultState.STATE_ERROR;
         }
-        return null;
+        return LoadingPage.ResultState.STATE_ERROR;
     }
 
     private ColdDetailsInfo getServiceData() {
         ColdDetailsInfo detailsInfo = new ColdDetailsInfo();
         try {
             // 从一个URL加载一个Document对象
-            document = nextImageText(SPUtils.getString(UIUtils.getContext(), GlobalConstants.EVERYDAY_URL_KEY, GlobalConstants.EVERYDAY_SERVICE_URL));
+            document = nextImageText(SPUtils.getString(UIUtils.getContext(), GlobalConstants.EVERYDAY_NEXT_URL_KEY, GlobalConstants.EVERYDAY_SERVICE_URL));
             if (document != null) {
                 currentState = SUCCESS;
                 // 选择标题所在节点
@@ -131,7 +128,7 @@ public class EverydayFragment extends BaseFragment {
                     if (elements.get(i).html().contains("&nbsp;")) {
                         continue;
                     }
-                    sb.append("\u3000\u3000" + elements.get(i).html() + "<br/>");
+                    sb.append("\u3000\u3000" + elements.get(i).html() + "<br/><br/>");
                 }
                 detailsInfo.pContent = sb.toString();
                 // 选择上一篇所在的节点
@@ -146,12 +143,14 @@ public class EverydayFragment extends BaseFragment {
                 detailsInfo.read = RandomUtils.getReadRandom();
                 // 设置赞数
                 detailsInfo.star = RandomUtils.getStarRandom();
+
+                // 写缓存
+                CacheUtils.setCache(GlobalConstants.EVERYDAY_CACHE_KEY, detailsInfo.toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
             currentState = ERROR;
         }
-        CacheUtils.setEverydayCache(detailsInfo.toString());
         return detailsInfo;
     }
 
@@ -169,7 +168,7 @@ public class EverydayFragment extends BaseFragment {
             if (element == null) {
                 Element next = d.select(".article-nav-next").first();
                 String nextUrl = next.select("a").attr("href");
-                SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_URL_KEY, nextUrl);
+                SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_NEXT_URL_KEY, nextUrl);
                 d = nextImageText(nextUrl);
             }
             return d;
@@ -178,16 +177,6 @@ public class EverydayFragment extends BaseFragment {
             currentState = ERROR;
         }
         return null;
-    }
-
-    /**
-     * @return
-     */
-    private String getCurrentDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yy年MM月dd日");
-        Date date = new Date(System.currentTimeMillis());
-        String time = dateFormat.format(date);
-        return time;
     }
 
 }

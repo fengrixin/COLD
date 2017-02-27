@@ -16,7 +16,7 @@ public class OtherActivity extends AppCompatActivity {
         /** 设置Toolbar */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_other);
         toolbar.setTitle("");
-        toolbar.setNavigationIcon(R.drawable.ic_info_black_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_menu_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

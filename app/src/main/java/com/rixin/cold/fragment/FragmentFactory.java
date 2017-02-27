@@ -27,8 +27,8 @@ public class FragmentFactory {
     public static final int IMAGE_TXT_FRAGMENT = 1;
     public static final int VIDEO_FRAGMENT = 2;
 
-    private static HashMap<Integer, BaseFragment> fragmentMap = new HashMap<Integer, BaseFragment>();
-    private static HashMap<Integer, BaseFragment> pageFragmentMap = new HashMap<Integer, BaseFragment>();
+    private static HashMap<Integer, BaseFragment> fragmentMap = new HashMap<>();
+    private static HashMap<Integer, BaseFragment> pageFragmentMap = new HashMap<>();
 
     public static BaseFragment createFragment(int position) {
         //先从集合中取，如果没有才创建对象
@@ -40,13 +40,13 @@ public class FragmentFactory {
                     fragment = new EverydayFragment();
                     break;
                 case 1:
-                    fragment = new ImageTxtFragment();
+//                    fragment = new ImageTxtFragment();
                     break;
                 case 2:
                     fragment = new VideoFragment();
                     break;
             }
-            fragmentMap.put(position, fragment);  //将fragment保存到集合中
+            fragmentMap.put(position, fragment);  // 将fragment保存到集合中
         }
         return fragment;
     }

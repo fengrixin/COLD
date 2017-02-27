@@ -6,13 +6,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.rixin.cold.R;
+import com.rixin.cold.utils.NetworkUtils;
 import com.rixin.cold.utils.ThreadManager;
 import com.rixin.cold.utils.UIUtils;
 
 /**
  * 根据当前状态来显示不同页面的自定义控件
- * <p>
- * -未加载  -加载中  -加载失败  -数据为空  -加载成功
+ *
+ * -未加载  -加载中  -加载失败  -加载成功
  * Created by 飘渺云轩 on 2017/2/5.
  */
 
@@ -54,10 +55,10 @@ public abstract class LoadingPage extends FrameLayout {
             errorPage.findViewById(R.id.btn_load_again).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    loadData();
-                    //显示加载中页面
-                    currentState = STATE_LOAD_LOADING;
-                    showRightPage();
+                    // 判断当前网络是否可用，如果可用就重新加载
+                    if(NetworkUtils.isNetworkConnected(UIUtils.getContext())) {
+                        loadData();
+                    }
                 }
             });
             addView(errorPage);
@@ -89,6 +90,7 @@ public abstract class LoadingPage extends FrameLayout {
         //如果没有加载，就开始加载数据
         if (currentState != STATE_LOAD_LOADING) {
             currentState = STATE_LOAD_LOADING;
+            showRightPage();
             //线程池
             ThreadManager.getThreadPool().execute(new Runnable() {
                 @Override

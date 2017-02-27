@@ -14,6 +14,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 /**
+ * 自定义圆形ImageView
  * Created by 飘渺云轩 on 2017/1/30.
  */
 
