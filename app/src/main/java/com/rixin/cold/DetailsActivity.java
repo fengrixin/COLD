@@ -30,6 +30,8 @@ public class DetailsActivity extends AppCompatActivity {
     private ImageView mPic;
     private TextView mTitle;
     private TextView mContent;
+    private TextView mReadCount;
+    private TextView mStarCount;
     private Toolbar toolbar;
     private FloatingActionButton fab;
 
@@ -60,10 +62,12 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void initView(){
+    private void initView() {
         mPic = (ImageView) findViewById(R.id.iv_details_pic);
         mTitle = (TextView) findViewById(R.id.tv_details_title);
         mContent = (TextView) findViewById(R.id.tv_details_content);
+        mReadCount = (TextView) findViewById(R.id.tv_details_reader);
+        mStarCount = (TextView) findViewById(R.id.tv_details_star);
 
         final String url = getIntent().getStringExtra(GlobalConstants.DETAILS_URL_KEY);
         if (NetworkUtils.isNetworkConnected(UIUtils.getContext())) {
@@ -83,9 +87,11 @@ public class DetailsActivity extends AppCompatActivity {
                     });
                 }
             });
-        }else{
+        } else {
             toolbar.setTitle("网络不可用");
         }
+        mReadCount.setText("阅读(" + getIntent().getIntExtra(GlobalConstants.READCOUNT_KEY, 2341) + ")");
+        mStarCount.setText("赞(" + getIntent().getIntExtra(GlobalConstants.STARCOUNT_KEY, 1634) + ")");
     }
 
     /**

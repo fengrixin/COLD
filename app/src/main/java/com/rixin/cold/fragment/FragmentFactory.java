@@ -23,33 +23,7 @@ import java.util.HashMap;
 
 public class FragmentFactory {
 
-    public static final int EVERYDAY_FRAGMENT = 0;
-    public static final int IMAGE_TXT_FRAGMENT = 1;
-    public static final int VIDEO_FRAGMENT = 2;
-
-    private static HashMap<Integer, BaseFragment> fragmentMap = new HashMap<>();
     private static HashMap<Integer, BaseFragment> pageFragmentMap = new HashMap<>();
-
-    public static BaseFragment createFragment(int position) {
-        //先从集合中取，如果没有才创建对象
-        BaseFragment fragment = fragmentMap.get(position);
-
-        if (fragment == null) {
-            switch (position) {
-                case 0:
-                    fragment = new EverydayFragment();
-                    break;
-                case 1:
-//                    fragment = new ImageTxtFragment();
-                    break;
-                case 2:
-                    fragment = new VideoFragment();
-                    break;
-            }
-            fragmentMap.put(position, fragment);  // 将fragment保存到集合中
-        }
-        return fragment;
-    }
 
     public static BaseFragment createPageFragment(int position) {
         BaseFragment fragment = pageFragmentMap.get(position);

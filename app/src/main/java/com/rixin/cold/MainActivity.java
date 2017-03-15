@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rixin.cold.fragment.BaseFragment;
+import com.rixin.cold.fragment.EverydayFragment;
 import com.rixin.cold.fragment.FragmentFactory;
 import com.rixin.cold.utils.UIUtils;
 
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         setImageTextVisibility(false);
 
         /** 每日一冷 */
-        mFragment = FragmentFactory.createFragment(FragmentFactory.EVERYDAY_FRAGMENT);
+        mFragment = new EverydayFragment();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.content_main, mFragment).commit();
     }
 
@@ -169,9 +170,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_everyday) {
             setImageTextVisibility(false);
             mTitle.setText(R.string.nav_everyday);
-            mFragment = FragmentFactory.createFragment(FragmentFactory.EVERYDAY_FRAGMENT);
+            mFragment = new EverydayFragment();
             this.getSupportFragmentManager().beginTransaction().replace(R.id.content_main, mFragment).commit();
-            Toast.makeText(UIUtils.getContext(), R.string.nav_everyday, Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_image_txt) {
             setImageTextVisibility(true);
             mTitle.setText(R.string.nav_image_txt);
@@ -179,11 +179,6 @@ public class MainActivity extends AppCompatActivity
             mTabs.setupWithViewPager(mViewPager);
             //移除fragment
             getSupportFragmentManager().beginTransaction().remove(mFragment).commit();
-        } else if (id == R.id.nav_video) {
-            setImageTextVisibility(false);
-            mTitle.setText(R.string.nav_video);
-            mFragment = FragmentFactory.createFragment(FragmentFactory.VIDEO_FRAGMENT);
-            this.getSupportFragmentManager().beginTransaction().replace(R.id.content_main, mFragment).commit();
         } else if (id == R.id.nav_collect) {
             toActivity(UIUtils.getString(R.string.nav_collect));
         } else if (id == R.id.nav_sponsor) {

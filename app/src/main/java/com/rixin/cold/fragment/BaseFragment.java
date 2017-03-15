@@ -150,11 +150,14 @@ public abstract class BaseFragment extends Fragment {
 
     /**
      * 跳转到详情页面
+     *
      * @param url
      */
-    public void toDetailsPage(String url) {
+    public void toDetailsPage(String url, int read, int star) {
         Intent intent = new Intent(getActivity(), DetailsActivity.class);
         intent.putExtra(GlobalConstants.DETAILS_URL_KEY, url);
+        intent.putExtra(GlobalConstants.READCOUNT_KEY, read);
+        intent.putExtra(GlobalConstants.STARCOUNT_KEY, star);
         startActivity(intent);
     }
 

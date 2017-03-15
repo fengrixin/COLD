@@ -23,9 +23,11 @@ import java.util.ArrayList;
 public class TabsRecyclerViewAdapter extends RecyclerView.Adapter<TabsRecyclerViewAdapter.TabsViewHolder> {
 
     private ArrayList<ColdInfo> data;
+    private int resource;
 
-    public TabsRecyclerViewAdapter(ArrayList<ColdInfo> data) {
+    public TabsRecyclerViewAdapter(ArrayList<ColdInfo> data, int resource) {
         this.data = data;
+        this.resource = resource;
     }
 
     public void setDataChangeListener(ArrayList<ColdInfo> data){
@@ -36,7 +38,7 @@ public class TabsRecyclerViewAdapter extends RecyclerView.Adapter<TabsRecyclerVi
     @Override
     public TabsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (parent.getTag() == null) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_item_tabs, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
             return new TabsViewHolder(view);
         } else {
             return new TabsViewHolder((View) parent.getTag());

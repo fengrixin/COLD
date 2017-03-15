@@ -11,10 +11,6 @@
             android:id="@+id/nav_image_txt"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/nav_image_txt" />
-        <item
-            android:id="@+id/nav_video"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/nav_video" />
     </group>
 
     <item android:title="其他">

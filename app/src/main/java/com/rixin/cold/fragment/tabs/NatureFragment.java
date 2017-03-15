@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
 
+import com.rixin.cold.R;
 import com.rixin.cold.adapter.TabsRecyclerViewAdapter;
 import com.rixin.cold.domain.ColdInfo;
 import com.rixin.cold.fragment.BaseFragment;
@@ -32,12 +33,12 @@ public class NatureFragment extends BaseFragment {
     @Override
     public View onCreateSuccessPage() {
         LinearLayoutManager manager = new LinearLayoutManager(UIUtils.getContext());
-        mAdapter = new TabsRecyclerViewAdapter(mData);
+        mAdapter = new TabsRecyclerViewAdapter(mData, R.layout.recycler_list_item_linear);
         MyRecyclerView myRecyclerView = new MyRecyclerView(manager, mAdapter) {
 
             @Override
             public void onItemClick(View view, int position) {
-                toDetailsPage(mData.get(position - 1).contentUrl);
+                toDetailsPage(mData.get(position - 1).contentUrl, mData.get(position - 1).readCount, mData.get(position - 1).starCount);
             }
 
             @Override

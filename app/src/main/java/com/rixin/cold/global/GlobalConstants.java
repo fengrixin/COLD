@@ -10,6 +10,9 @@ public class GlobalConstants {
     public final static String SERVICE_URL = "http://www.lengzs100.com/";  // 首页
     public final static String BEFORE_TIME_KEY = "oldDate";  // 最近打开应用的日期key
     public final static String DETAILS_URL_KEY = "detailsUrl";  // 跳转到详情页的key
+    public final static String STARCOUNT_KEY = "starCount";  // 赞的key
+    public final static String READCOUNT_KEY = "starCount";  // 赞的key
+
 
     /**
      * 每日一冷
@@ -72,12 +75,5 @@ public class GlobalConstants {
     public final static String TABS_CELEBRITY_CACHE_KAY = "mingrenCache";
     public final static String TABS_CELEBRITY_URL = SERVICE_URL + "mingren";  // 名人
     public final static String TABS_CELEBRITY_NEXT_URL = TABS_CELEBRITY_URL + "/page/";  // 名人下一页
-
-    /**
-     * 视频精选
-     */
-    public final static String VIDEO_CACHE_KEY = "videoCache";  // 缓存key
-    public final static String VIDEO_SERVICE_URL = SERVICE_URL + "shipin";
-    public final static String VIDEO_SERVICE_NEXT_URL = VIDEO_SERVICE_URL + "/page/";  // 下一页
 
 }
