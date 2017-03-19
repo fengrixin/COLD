@@ -5,13 +5,13 @@
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
         <!--设置Toolbar的高度-->
-        <item name="android:actionBarSize">46dp</item>
+        <item name="actionBarSize">46dp</item>
     </style>
     <style name="AppTheme.NoActionBar_Transparent">
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
         <!--设置Toolbar的高度-->
-        <item name="android:actionBarSize">46dp</item>
+        <item name="actionBarSize">46dp</item>
     </style>
 
 </resources>

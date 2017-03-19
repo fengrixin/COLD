@@ -83,7 +83,6 @@ public class EverydayFragment extends BaseFragment {
         // 判断当前日期和上次打开的日期是否一致，如果不一致则加载下一篇文章
         if (!beforeTime.equals(getCurrentDate())) {
             SPUtils.setString(UIUtils.getContext(), GlobalConstants.BEFORE_TIME_KEY, getCurrentDate());
-            SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_NEXT_URL_KEY, mDetailsInfo.nextUrl);
             // 加载下一篇图文的服务器数据
             mDetailsInfo = getServiceData();
         } else {
@@ -144,6 +143,8 @@ public class EverydayFragment extends BaseFragment {
                 // 设置赞数
                 detailsInfo.star = RandomUtils.getStarRandom();
 
+                // 存储下一篇的URL
+                SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_NEXT_URL_KEY, detailsInfo.nextUrl);
                 // 写缓存
                 CacheUtils.setCache(GlobalConstants.EVERYDAY_CACHE_KEY, detailsInfo.toString());
             }

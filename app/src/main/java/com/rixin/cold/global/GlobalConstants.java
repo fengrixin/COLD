@@ -11,7 +11,7 @@ public class GlobalConstants {
     public final static String BEFORE_TIME_KEY = "oldDate";  // 最近打开应用的日期key
     public final static String DETAILS_URL_KEY = "detailsUrl";  // 跳转到详情页的key
     public final static String STARCOUNT_KEY = "starCount";  // 赞的key
-    public final static String READCOUNT_KEY = "starCount";  // 赞的key
+    public final static String READCOUNT_KEY = "readCount";  // 阅读的key
 
 
     /**

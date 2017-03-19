@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-//            super.onBackPressed();
+            super.onBackPressed();
         }
     }
 
@@ -154,6 +154,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
+            Intent intent = new Intent(UIUtils.getContext(), SearchActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -180,13 +182,13 @@ public class MainActivity extends AppCompatActivity
             //移除fragment
             getSupportFragmentManager().beginTransaction().remove(mFragment).commit();
         } else if (id == R.id.nav_collect) {
-            toActivity(UIUtils.getString(R.string.nav_collect));
+            toActivity(UIUtils.getString(R.string.nav_collect), 0);
         } else if (id == R.id.nav_sponsor) {
-            toActivity(UIUtils.getString(R.string.nav_sponsor));
+            toActivity(UIUtils.getString(R.string.nav_sponsor), 1);
         } else if (id == R.id.nav_app) {
-            toActivity(UIUtils.getString(R.string.nav_app));
+            toActivity(UIUtils.getString(R.string.nav_app), 2);
         } else if (id == R.id.nav_setting) {
-            toActivity(UIUtils.getString(R.string.nav_setting));
+            toActivity(UIUtils.getString(R.string.nav_setting), 3);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -194,9 +196,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void toActivity(String value) {
+    private void toActivity(String value, int flag) {
         Intent intent = new Intent(UIUtils.getContext(), OtherActivity.class);
         intent.putExtra("title", value);
+        intent.putExtra("flag", flag);
         startActivity(intent);
     }
 

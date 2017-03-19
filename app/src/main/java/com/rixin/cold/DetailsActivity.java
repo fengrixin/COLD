@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.rixin.cold.domain.ColdDetailsInfo;
 import com.rixin.cold.global.GlobalConstants;
+import com.rixin.cold.utils.ColdDBOpenHelper;
+import com.rixin.cold.utils.DBUtils;
 import com.rixin.cold.utils.NetworkUtils;
 import com.rixin.cold.utils.RandomUtils;
 import com.rixin.cold.utils.ThreadManager;
@@ -35,6 +37,12 @@ public class DetailsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private FloatingActionButton fab;
 
+    private int readCount;
+    private int starCount;
+    private boolean isStar = false; // 是否已经收藏
+    private ColdDBOpenHelper helper;
+    private String url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,25 +59,22 @@ public class DetailsActivity extends AppCompatActivity {
 
         initView();
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fab.setImageResource(R.mipmap.ic_star_selected);
-                Snackbar.make(view, "收藏成功，在我的收藏中查看", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     private void initView() {
+        helper = new ColdDBOpenHelper(UIUtils.getContext());
+
         mPic = (ImageView) findViewById(R.id.iv_details_pic);
         mTitle = (TextView) findViewById(R.id.tv_details_title);
         mContent = (TextView) findViewById(R.id.tv_details_content);
         mReadCount = (TextView) findViewById(R.id.tv_details_reader);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         mStarCount = (TextView) findViewById(R.id.tv_details_star);
 
-        final String url = getIntent().getStringExtra(GlobalConstants.DETAILS_URL_KEY);
+        readCount = getIntent().getIntExtra(GlobalConstants.READCOUNT_KEY, 2341);
+        starCount = getIntent().getIntExtra(GlobalConstants.STARCOUNT_KEY, 1547);
+
+        url = getIntent().getStringExtra(GlobalConstants.DETAILS_URL_KEY);
         if (NetworkUtils.isNetworkConnected(UIUtils.getContext())) {
             ThreadManager.getThreadPool().execute(new Runnable() {
                 @Override
@@ -82,6 +87,12 @@ public class DetailsActivity extends AppCompatActivity {
                                 Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).asBitmap().diskCacheStrategy(DiskCacheStrategy.ALL).into(mPic);
                                 mTitle.setText(mDetailsInfo.title + "?");
                                 mContent.setText(Html.fromHtml(mDetailsInfo.pContent));
+                                if (DBUtils.query(helper, mDetailsInfo.title)) {
+                                    isStar = true;
+                                    fab.setImageResource(R.mipmap.ic_star_selected);
+                                }
+                                // 图文显示后才允许收藏
+                                starAble();
                             }
                         }
                     });
@@ -90,8 +101,37 @@ public class DetailsActivity extends AppCompatActivity {
         } else {
             toolbar.setTitle("网络不可用");
         }
-        mReadCount.setText("阅读(" + getIntent().getIntExtra(GlobalConstants.READCOUNT_KEY, 2341) + ")");
-        mStarCount.setText("赞(" + getIntent().getIntExtra(GlobalConstants.STARCOUNT_KEY, 1634) + ")");
+        mReadCount.setText("阅读(" + readCount + ")");
+        mStarCount.setText("赞(" + starCount + ")");
+    }
+
+    /**
+     *  收藏
+     */
+    public void starAble(){
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isStar) {
+                    isStar = true;
+                    // 收藏
+                    boolean success = DBUtils.insert(helper, mDetailsInfo.title, mDetailsInfo.picUrl, url, readCount, starCount);
+                    if (success) {
+                        fab.setImageResource(R.mipmap.ic_star_selected);
+                        Snackbar.make(view, "收藏成功，在我的收藏中查看", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                } else {
+                    isStar = false;
+                    boolean success = DBUtils.delete(helper, mDetailsInfo.title);
+                    if (success) {
+                        fab.setImageResource(R.mipmap.ic_star_normal);
+                        Snackbar.make(view, "取消收藏，感谢您的阅读", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                }
+            }
+        });
     }
 
     /**

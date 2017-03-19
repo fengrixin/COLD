@@ -30,7 +30,7 @@
 
             <TextView
                 android:id="@+id/tv_everyday_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/iv_everyday_pic"
                 android:background="@drawable/text_gradient_bg"

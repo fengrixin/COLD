@@ -1,12 +1,17 @@
 package com.rixin.cold;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.rixin.cold.fragment.others.StarFragment;
+
 public class OtherActivity extends AppCompatActivity {
+
+    private Fragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +33,25 @@ public class OtherActivity extends AppCompatActivity {
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         /** 设置Title */
         TextView mTitle = (TextView) this.findViewById(R.id.tv_app_other_title);
         String title = this.getIntent().getStringExtra("title");
         mTitle.setText(title);
+        switch (getIntent().getIntExtra("flag", 0)) {
+            case 0:
+                mFragment = new StarFragment();
+                break;
+            case 1:
+                mFragment = new StarFragment();
+                break;
+            case 2:
+                mFragment = new StarFragment();
+                break;
+            case 3:
+                mFragment = new StarFragment();
+                break;
+        }
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.content_other, mFragment).commit();
     }
-
 }
