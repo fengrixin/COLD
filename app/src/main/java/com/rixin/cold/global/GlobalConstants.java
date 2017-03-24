@@ -13,6 +13,12 @@ public class GlobalConstants {
     public final static String STARCOUNT_KEY = "starCount";  // 赞的key
     public final static String READCOUNT_KEY = "readCount";  // 阅读的key
 
+    /**
+     *  搜索
+     */
+    public final static String SOCKET = "?s=";
+    public final static String SEARCH_SERVICE_URL = "http://www.lengzs100.com/";
+    public final static String SEARCH_SERVICE_NEXT_URL = "http://www.lengzs100.com/page/";
 
     /**
      * 每日一冷

@@ -4,6 +4,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="search">搜索</string>
 
     <!-- NavigateView Item -->
     <string name="nav_everyday">每日一冷</string>
@@ -42,6 +43,7 @@
     </string-array>
 
     <string name="title_activity_details">详情阅读</string>
+    <string name="edit_text">请输入搜索的内容</string>
     <string name="action_settings">Settings</string>
 
 </resources>

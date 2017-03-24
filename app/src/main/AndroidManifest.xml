@@ -26,6 +26,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SearchActivity"
+            android:windowSoftInputMode="stateVisible"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".DetailsActivity"

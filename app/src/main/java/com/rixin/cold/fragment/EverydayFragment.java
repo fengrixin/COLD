@@ -1,5 +1,6 @@
 package com.rixin.cold.fragment;
 
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,6 +44,7 @@ public class EverydayFragment extends BaseFragment {
     private final static int SUCCESS = 0;
     private final static int ERROR = 1;
     private int currentState = SUCCESS;
+    private CardView mCardView;
 
     @Override
     public View onCreateSuccessPage() {
@@ -50,6 +52,7 @@ public class EverydayFragment extends BaseFragment {
         mPic = (ImageView) view.findViewById(R.id.iv_everyday_pic);
         mArrow = (ImageView) view.findViewById(R.id.iv_everyday_arrow);
         mTextArrow = (TextView) view.findViewById(R.id.tv_everyday_arrow);
+        mCardView = (CardView) view.findViewById(R.id.card_view_everyday);
         mTitle = (TextView) view.findViewById(R.id.tv_everyday_title);
         mContent = (TextView) view.findViewById(R.id.tv_everyday_content);
         mTime = (TextView) view.findViewById(R.id.tv_everyday_time);
@@ -60,7 +63,7 @@ public class EverydayFragment extends BaseFragment {
             Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_thumb_bg).into(mPic);
             mTitle.setText(mDetailsInfo.title + "?");
             mContent.setText(Html.fromHtml(mDetailsInfo.pContent));
-            mArrow.setOnClickListener(new View.OnClickListener() {
+            mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mContent.setMaxLines(1500);

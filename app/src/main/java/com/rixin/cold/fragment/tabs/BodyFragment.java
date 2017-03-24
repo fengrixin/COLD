@@ -1,9 +1,9 @@
 package com.rixin.cold.fragment.tabs;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.rixin.cold.R;
 import com.rixin.cold.adapter.TabsRecyclerViewAdapter;
@@ -56,7 +56,7 @@ public class BodyFragment extends BaseFragment {
                     UIUtils.runOnUIThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(UIUtils.getContext(), "当前网络不可用", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(getView(), "当前网络不可用",Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                         }
                     });
                 }
@@ -74,7 +74,7 @@ public class BodyFragment extends BaseFragment {
                         @Override
                         public void run() {
                             if (currentSize == mData.size()) {
-                                Toast.makeText(UIUtils.getContext(), "到底了哦，请移步其他分类阅读...", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(), "到底了哦，请移步其他分类阅读...",Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                             }
                             currentSize = mData.size();
                             mAdapter.setDataChangeListener(mData);
@@ -84,7 +84,7 @@ public class BodyFragment extends BaseFragment {
                     UIUtils.runOnUIThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(UIUtils.getContext(), "当前网络不可用", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(getView(), "当前网络不可用",Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                         }
                     });
                 }

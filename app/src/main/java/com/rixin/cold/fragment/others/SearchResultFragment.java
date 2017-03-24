@@ -1,5 +1,7 @@
-package com.rixin.cold.fragment.tabs;
+package com.rixin.cold.fragment.others;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -9,9 +11,7 @@ import com.rixin.cold.adapter.TabsRecyclerViewAdapter;
 import com.rixin.cold.domain.ColdInfo;
 import com.rixin.cold.fragment.BaseFragment;
 import com.rixin.cold.global.GlobalConstants;
-import com.rixin.cold.utils.CacheUtils;
 import com.rixin.cold.utils.NetworkUtils;
-import com.rixin.cold.utils.SPUtils;
 import com.rixin.cold.utils.UIUtils;
 import com.rixin.cold.widget.LoadingPage;
 import com.rixin.cold.widget.MyRecyclerView;
@@ -19,16 +19,26 @@ import com.rixin.cold.widget.MyRecyclerView;
 import java.util.ArrayList;
 
 /**
- * 科学
+ * 动物
  * Created by 飘渺云轩 on 2017/2/9.
  */
 
-public class ScienceFragment extends BaseFragment {
+public class SearchResultFragment extends BaseFragment {
 
     private ArrayList<ColdInfo> mData;
     private TabsRecyclerViewAdapter mAdapter;
     private int page = 1;
     private int currentSize = 0;
+    private String searchText;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 接收 Activity 传过来的值
+        Bundle bundle = getArguments();
+        searchText = bundle.getString("search_text");
+        System.out.println("----"+searchText);
+    }
 
     @Override
     public View onCreateSuccessPage() {
@@ -43,29 +53,13 @@ public class ScienceFragment extends BaseFragment {
 
             @Override
             public void onRefresh() {
-                if (NetworkUtils.isNetworkConnected(UIUtils.getContext())) {
-                    mData = getServiceData(GlobalConstants.TABS_SCIENCE_URL);
-                    UIUtils.runOnUIThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.setDataChangeListener(mData);
-                        }
-                    });
-                } else {
-                    UIUtils.runOnUIThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Snackbar.make(getView(), "当前网络不可用",Snackbar.LENGTH_SHORT).setAction("Action", null).show();
-                        }
-                    });
-                }
             }
 
             @Override
             public void onLoadMore() {
                 if (NetworkUtils.isNetworkConnected(UIUtils.getContext())) {
                     page += 1;
-                    ArrayList<ColdInfo> moreData = getServiceData(GlobalConstants.TABS_SCIENCE_NEXT_URL + page);
+                    ArrayList<ColdInfo> moreData = getServiceData(GlobalConstants.SEARCH_SERVICE_NEXT_URL + page + GlobalConstants.SOCKET + searchText);
                     if (moreData != null) {
                         mData.addAll(moreData);
                     }
@@ -73,7 +67,8 @@ public class ScienceFragment extends BaseFragment {
                         @Override
                         public void run() {
                             if (currentSize == mData.size()) {
-                                Snackbar.make(getView(), "到底了哦，请移步其他分类阅读...",Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                                Snackbar.make(getView(), "到底了哦，请移步其他分类阅读...", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+//                                Toast.makeText(UIUtils.getContext(), "到底了哦，请移步其他分类阅读...", Toast.LENGTH_SHORT).show();
                             }
                             currentSize = mData.size();
                             mAdapter.setDataChangeListener(mData);
@@ -83,7 +78,8 @@ public class ScienceFragment extends BaseFragment {
                     UIUtils.runOnUIThread(new Runnable() {
                         @Override
                         public void run() {
-                            Snackbar.make(getView(), "当前网络不可用",Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                            Snackbar.make(getView(), "当前网络不可用，请检查网络连接！", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+//                            Toast.makeText(UIUtils.getContext(), "当前网络不可用", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -95,21 +91,23 @@ public class ScienceFragment extends BaseFragment {
     @Override
     public LoadingPage.ResultState onLoadData() {
         page = 1;
-        String beforeTime = SPUtils.getString(UIUtils.getContext(), GlobalConstants.BEFORE_TIME_KEY, getCurrentDate());
-        if (beforeTime.equals(getCurrentDate())) {
-            // 如果日期相符则加载缓存
-            mData = CacheUtils.getCache(GlobalConstants.TABS_SCIENCE_CACHE_KAY);
-            if (mData == null) {
-                mData = getServiceData(GlobalConstants.TABS_SCIENCE_URL);
-                // 写缓存
-                CacheUtils.setCache(GlobalConstants.TABS_SCIENCE_CACHE_KAY, getCacheString(mData));
-            }
-        } else {
-            mData = getServiceData(GlobalConstants.TABS_SCIENCE_URL);
-            // 写缓存
-            CacheUtils.setCache(GlobalConstants.TABS_SCIENCE_CACHE_KAY, getCacheString(mData));
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        mData = getServiceData(GlobalConstants.SEARCH_SERVICE_URL + GlobalConstants.SOCKET +  searchText);
         return check(mData);
     }
-
 }
