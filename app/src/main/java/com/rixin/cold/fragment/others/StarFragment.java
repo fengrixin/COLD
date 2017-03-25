@@ -54,7 +54,7 @@ public class StarFragment extends BaseFragment {
 
             @Override
             public void onLoadMore() {
-                Snackbar.make(getView(), "到底了哦，没有更多收藏冷知识了...", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                Snackbar.make(getView(), "到底了哦，没有更多的收藏冷知识了...", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
             }
         };
         return myRecyclerView.getView();
