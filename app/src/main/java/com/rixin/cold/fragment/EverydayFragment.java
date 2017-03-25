@@ -1,9 +1,9 @@
 package com.rixin.cold.fragment;
 
-import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -32,10 +32,11 @@ public class EverydayFragment extends BaseFragment {
     private ColdDetailsInfo mDetailsInfo;
     private Document document;
     private ImageView mPic;
-    private ImageView mArrow;
+    private ImageView mArrowPic;
     private TextView mTextArrow;
     private TextView mTitle;
     private TextView mContent;
+    private RelativeLayout mShow;
     private TextView mTime;
     private TextView mRead;
     private TextView mStar;
@@ -44,15 +45,15 @@ public class EverydayFragment extends BaseFragment {
     private final static int SUCCESS = 0;
     private final static int ERROR = 1;
     private int currentState = SUCCESS;
-    private CardView mCardView;
+    private boolean isShow = false;  // 标记展示内容的开关状态
 
     @Override
     public View onCreateSuccessPage() {
-        View view = UIUtils.inflate(R.layout.recycler_list_item_everyday);
+        View view = UIUtils.inflate(R.layout.fragment_everyday);
         mPic = (ImageView) view.findViewById(R.id.iv_everyday_pic);
-        mArrow = (ImageView) view.findViewById(R.id.iv_everyday_arrow);
+        mArrowPic = (ImageView) view.findViewById(R.id.iv_everyday_arrow);
         mTextArrow = (TextView) view.findViewById(R.id.tv_everyday_arrow);
-        mCardView = (CardView) view.findViewById(R.id.card_view_everyday);
+        mShow = (RelativeLayout) view.findViewById(R.id.rl_show);
         mTitle = (TextView) view.findViewById(R.id.tv_everyday_title);
         mContent = (TextView) view.findViewById(R.id.tv_everyday_content);
         mTime = (TextView) view.findViewById(R.id.tv_everyday_time);
@@ -63,17 +64,17 @@ public class EverydayFragment extends BaseFragment {
             Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_thumb_bg).into(mPic);
             mTitle.setText(mDetailsInfo.title + "?");
             mContent.setText(Html.fromHtml(mDetailsInfo.pContent));
-            mCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mContent.setMaxLines(1500);
-                    mArrow.setVisibility(View.GONE);
-                    mTextArrow.setVisibility(View.GONE);
-                }
-            });
+            mTextArrow.setText("展开");
             mTime.setText("发布时间：" + getCurrentDate());
             mRead.setText("阅读(" + mDetailsInfo.read + ")");
             mStar.setText("赞(" + mDetailsInfo.star + ")");
+
+            mShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toggle();
+                }
+            });
         }
 
         return view;
@@ -107,6 +108,28 @@ public class EverydayFragment extends BaseFragment {
         return LoadingPage.ResultState.STATE_ERROR;
     }
 
+    /**
+     * 属性动画，展示/收起详细内容
+     */
+    private void toggle() {
+        if (isShow) {
+            isShow = false;
+            mContent.setMaxLines(8);
+            mArrowPic.setImageResource(R.drawable.ic_arrow_down);
+            mTextArrow.setText("展开");
+        } else {
+            isShow = true;
+            mContent.setMaxLines(1000);
+            mArrowPic.setImageResource(R.drawable.ic_arrow_up);
+            mTextArrow.setText("收起");
+        }
+}
+
+    /**
+     * 访问网页获取数据
+     *
+     * @return
+     */
     private ColdDetailsInfo getServiceData() {
         ColdDetailsInfo detailsInfo = new ColdDetailsInfo();
         try {

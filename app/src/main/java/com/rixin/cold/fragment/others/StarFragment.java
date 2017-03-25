@@ -1,5 +1,6 @@
 package com.rixin.cold.fragment.others;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -53,6 +54,7 @@ public class StarFragment extends BaseFragment {
 
             @Override
             public void onLoadMore() {
+                Snackbar.make(getView(), "到底了哦，没有更多收藏冷知识了...", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
             }
         };
         return myRecyclerView.getView();

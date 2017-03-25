@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -127,8 +128,8 @@ public class MainActivity extends AppCompatActivity
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             long secondTime = System.currentTimeMillis();
-            if (secondTime - firstTime > 2000) {
-                Toast.makeText(this, "再按一次退出应用", Toast.LENGTH_SHORT).show();
+            if (secondTime - firstTime > 1000) {
+                Snackbar.make(getWindow().getDecorView(),"再按一次退出应用",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
                 firstTime = secondTime;
                 return true;
             } else {
@@ -187,8 +188,8 @@ public class MainActivity extends AppCompatActivity
             toActivity(UIUtils.getString(R.string.nav_sponsor), 1);
         } else if (id == R.id.nav_app) {
             toActivity(UIUtils.getString(R.string.nav_app), 2);
-        } else if (id == R.id.nav_setting) {
-            toActivity(UIUtils.getString(R.string.nav_setting), 3);
+        } else if (id == R.id.nav_discus) {
+            toActivity(UIUtils.getString(R.string.nav_discus), 3);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
