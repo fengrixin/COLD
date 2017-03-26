@@ -48,6 +48,7 @@
         本应用致力于让各位每天都有所收获，每天都能学到一点冷知识。如果您喜欢它，不妨小额赞助以下我们，您的支持就是我们的动力，感激不尽！</string>
     <string name="sponsor_ad">当然，在详情阅读页面「点击广告」也是对我们的一种支持。</string>
     <string name="sponsor_copy_right">Copyright 飘渺云轩 2016-12-12 </string>
+    <string name="data_source">数据来源：http://www.lengzs100.com</string>
     <string name="action_settings">Settings</string>
 
 </resources>

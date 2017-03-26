@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.rixin.cold.R;
 
 /**
+ *  赞助我们
  * Created by 飘渺云轩 on 2017/3/24.
  */
 

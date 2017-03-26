@@ -44,7 +44,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+                    <ImageView
+                        android:id="@+id/iv_details_share"
+                        android:layout_width="wrap_content"
+                        android:clickable="true"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_menu_share"
+                        android:layout_marginRight="@dimen/dp_8"/>
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

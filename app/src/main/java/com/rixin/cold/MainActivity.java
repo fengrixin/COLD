@@ -19,9 +19,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rixin.cold.fragment.BaseFragment;
 import com.rixin.cold.fragment.EverydayFragment;
@@ -32,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private TextView mTitle;
-    private ImageView mUserIcon;
+//    private ImageView mUserIcon;
     private BaseFragment mFragment;
     private TabLayout mTabs;
     private ViewPager mViewPager;
@@ -67,14 +65,14 @@ public class MainActivity extends AppCompatActivity
         //获取当前时间
         firstTime = System.currentTimeMillis();
 
-        /** 登录账号 */
-        mUserIcon = (ImageView) headerView.findViewById(R.id.iv_userIcon);
-        mUserIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "登录账号", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        /** 登录账号 */
+//        mUserIcon = (ImageView) headerView.findViewById(R.id.iv_userIcon);
+//        mUserIcon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(MainActivity.this, "登录账号", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         /** Toolbar标题 */
         mTitle = (TextView) this.findViewById(R.id.tv_app_title);
@@ -189,7 +187,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_app) {
             toActivity(UIUtils.getString(R.string.nav_app), 2);
         } else if (id == R.id.nav_discus) {
-            toActivity(UIUtils.getString(R.string.nav_discus), 3);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

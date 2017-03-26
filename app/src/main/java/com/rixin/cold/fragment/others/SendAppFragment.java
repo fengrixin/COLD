@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
+ * 推荐应用
  * Created by 飘渺云轩 on 2017/3/24.
  */
 

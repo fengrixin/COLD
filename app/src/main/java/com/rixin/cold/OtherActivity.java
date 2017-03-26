@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.rixin.cold.fragment.others.SendAppFragment;
-import com.rixin.cold.fragment.others.SettingFragment;
 import com.rixin.cold.fragment.others.SponsorFragment;
 import com.rixin.cold.fragment.others.StarFragment;
 
@@ -50,9 +49,6 @@ public class OtherActivity extends AppCompatActivity {
                 break;
             case 2:
                 mFragment = new SendAppFragment();
-                break;
-            case 3:
-                mFragment = new SettingFragment();
                 break;
         }
         this.getSupportFragmentManager().beginTransaction().replace(R.id.content_other, mFragment).commit();

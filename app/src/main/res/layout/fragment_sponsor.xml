@@ -53,9 +53,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/dp_24"
+                android:layout_marginTop="@dimen/dp_24"
                 android:text="@string/sponsor_copy_right"
                 android:textSize="@dimen/dp_18" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/dp_8"
+                android:text="@string/data_source"
+                android:textSize="@dimen/sp_10"/>
 
         </LinearLayout>
 
