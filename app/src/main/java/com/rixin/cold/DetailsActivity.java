@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private ColdDetailsInfo mDetailsInfo;
     private ImageView mPic;
-    private ImageView mShare;
+    private TextView mFrom;
     private TextView mTitle;
     private TextView mContent;
     private TextView mReadCount;
@@ -51,13 +52,25 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        toolbar = (Toolbar) findViewById(R.id.toolbar_details);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_base);
         toolbar.setTitle(R.string.title_activity_details);
+        toolbar.inflateMenu(R.menu.details_main);
         toolbar.setNavigationIcon(R.drawable.ic_menu_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if(id == R.id.action_share){
+                    // 分享
+                    showShare();
+                }
+                return false;
             }
         });
 
@@ -71,7 +84,7 @@ public class DetailsActivity extends AppCompatActivity {
         helper = new ColdDBOpenHelper(UIUtils.getContext());
 
         mPic = (ImageView) findViewById(R.id.iv_details_pic);
-        mShare = (ImageView) findViewById(R.id.iv_details_share);
+        mFrom = (TextView) findViewById(R.id.tv_details_from);
         mTitle = (TextView) findViewById(R.id.tv_details_title);
         mContent = (TextView) findViewById(R.id.tv_details_content);
         mReadCount = (TextView) findViewById(R.id.tv_details_reader);
@@ -92,6 +105,7 @@ public class DetailsActivity extends AppCompatActivity {
                         public void run() {
                             if (mDetailsInfo != null) {
                                 Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).asBitmap().diskCacheStrategy(DiskCacheStrategy.ALL).into(mPic);
+                                mFrom.setText("文章来源："+ url);
                                 mTitle.setText(mDetailsInfo.title + "?");
                                 mContent.setText(Html.fromHtml(mDetailsInfo.pContent));
                                 if (DBUtils.query(helper, mDetailsInfo.title)) {
@@ -115,7 +129,7 @@ public class DetailsActivity extends AppCompatActivity {
     /**
      *  收藏
      */
-    public void starAble(){
+    public void starAble() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,12 +151,6 @@ public class DetailsActivity extends AppCompatActivity {
                                 .setAction("Action", null).show();
                     }
                 }
-            }
-        });
-        mShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showShare();
             }
         });
     }

@@ -32,7 +32,7 @@
     -keep public class android.app.Notification
     -keep public class android.webkit.**
 
-#保护WebView对HTML页面的API不被混淆
+# 保护WebView对HTML页面的API不被混淆
     -keep class **.Webview2JsInterface {*; }
     -keep public class * extends android.app.Dialog
     -keep public class * extends android.view
@@ -48,7 +48,7 @@
     native <methods>;
     }
 
-#保持R文件不被混淆，否则，你的反射是获取不到资源id的
+# 保持R文件不被混淆，否则，你的反射是获取不到资源id的
     -keep class **.R*{*;}
 
 # parcelable 不被混淆
@@ -56,10 +56,10 @@
     public static finalandroid.os.ParcelableCreator *;
     }
 
-#保持实现"Serializable"接口的类不被混淆
+# 保持实现"Serializable"接口的类不被混淆
     -keepnames class * implements java.io.Serializable
 
-#保护实现接口Serializable的类中，指定规则的类成员不被混淆
+# 保护实现接口Serializable的类中，指定规则的类成员不被混淆
     -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
     private static final java.io.ObjectStreamField[] serialPersistentFields;
@@ -71,3 +71,13 @@
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
     }
+
+# ShareSDK 混淆配置
+    -keep class cn.sharesdk.**{*;}
+	-keep class com.sina.**{*;}
+	-keep class **.R$* {*;}
+	-keep class **.R{*;}
+	-keep class com.mob.**{*;}
+	-dontwarn com.mob.**
+	-dontwarn cn.sharesdk.**
+	-dontwarn **.R$*
