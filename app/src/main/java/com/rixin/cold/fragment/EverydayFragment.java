@@ -61,7 +61,7 @@ public class EverydayFragment extends BaseFragment {
         mStar = (TextView) view.findViewById(R.id.tv_everyday_star);
 
         if (mDetailsInfo != null) {
-            Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_thumb_bg).into(mPic);
+            Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ic_thumb_bg).into(mPic);
             mTitle.setText(mDetailsInfo.title + "?");
             mContent.setText(Html.fromHtml(mDetailsInfo.pContent));
             mTextArrow.setText("展开");

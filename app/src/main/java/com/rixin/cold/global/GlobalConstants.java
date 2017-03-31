@@ -9,6 +9,7 @@ public class GlobalConstants {
 
     public final static String SERVICE_URL = "http://www.lengzs100.com/";  // 首页
     public final static String BEFORE_TIME_KEY = "oldDate";  // 最近打开应用的日期key
+    public final static String INVITE_BEFORE_TIME_KEY = "inviteDate";  // 上一次邀请好评的日期key
     public final static String DETAILS_URL_KEY = "detailsUrl";  // 跳转到详情页的key
     public final static String STARCOUNT_KEY = "starCount";  // 赞的key
     public final static String READCOUNT_KEY = "readCount";  // 阅读的key

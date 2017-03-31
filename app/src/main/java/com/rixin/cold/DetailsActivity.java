@@ -21,6 +21,7 @@ import com.rixin.cold.utils.NetworkUtils;
 import com.rixin.cold.utils.RandomUtils;
 import com.rixin.cold.utils.ThreadManager;
 import com.rixin.cold.utils.UIUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -110,7 +111,7 @@ public class DetailsActivity extends AppCompatActivity {
                                 mContent.setText(Html.fromHtml(mDetailsInfo.pContent));
                                 if (DBUtils.query(helper, mDetailsInfo.title)) {
                                     isStar = true;
-                                    fab.setImageResource(R.mipmap.ic_star_selected);
+                                    fab.setImageResource(R.drawable.ic_star_selected);
                                 }
                                 // 图文显示后才允许收藏
                                 starAble();
@@ -138,7 +139,7 @@ public class DetailsActivity extends AppCompatActivity {
                     // 收藏
                     boolean success = DBUtils.insert(helper, mDetailsInfo.title, mDetailsInfo.picUrl, url, readCount, starCount);
                     if (success) {
-                        fab.setImageResource(R.mipmap.ic_star_selected);
+                        fab.setImageResource(R.drawable.ic_star_selected);
                         Snackbar.make(view, "收藏成功，在我的收藏中查看", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
@@ -146,7 +147,7 @@ public class DetailsActivity extends AppCompatActivity {
                     isStar = false;
                     boolean success = DBUtils.delete(helper, mDetailsInfo.title);
                     if (success) {
-                        fab.setImageResource(R.mipmap.ic_star_normal);
+                        fab.setImageResource(R.drawable.ic_star_normal);
                         Snackbar.make(view, "取消收藏，感谢您的阅读", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
@@ -231,5 +232,19 @@ public class DetailsActivity extends AppCompatActivity {
         oks.setSilent(true);
         // 启动分享GUI
         oks.show(this);
+    }
+
+    /**
+     *  友盟统计
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

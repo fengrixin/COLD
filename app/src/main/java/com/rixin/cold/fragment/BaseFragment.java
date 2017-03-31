@@ -14,6 +14,7 @@ import com.rixin.cold.global.GlobalConstants;
 import com.rixin.cold.utils.RandomUtils;
 import com.rixin.cold.utils.UIUtils;
 import com.rixin.cold.widget.LoadingPage;
+import com.umeng.analytics.MobclickAgent;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,9 +35,18 @@ public abstract class BaseFragment extends Fragment {
 
     private LoadingPage loadingPage;
 
+    /**
+     *  友盟统计
+     */
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(getClass().getName());
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(getActivity().getLocalClassName());
     }
 
     @Nullable

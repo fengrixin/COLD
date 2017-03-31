@@ -1,6 +1,8 @@
 package com.rixin.cold;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -25,6 +27,7 @@ import com.rixin.cold.fragment.BaseFragment;
 import com.rixin.cold.fragment.EverydayFragment;
 import com.rixin.cold.fragment.FragmentFactory;
 import com.rixin.cold.utils.UIUtils;
+import com.umeng.analytics.MobclickAgent;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_base);
         mToolbar.setTitle("");
+//        mToolbar.setTitle(getApplicationMetaValue("COLD_CHANNEL"));  // 显示当前渠道名称
         setSupportActionBar(mToolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -58,6 +62,19 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         initView();
+    }
+
+    private String  getApplicationMetaValue(String name) {
+        String value= "";
+        try {
+            ApplicationInfo appInfo =getPackageManager()
+                    .getApplicationInfo(getPackageName(),
+                            PackageManager.GET_META_DATA);
+            value = appInfo.metaData.getString(name);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return value;
     }
 
     private void initView() {
@@ -109,6 +126,20 @@ public class MainActivity extends AppCompatActivity
             params.setScrollFlags(0);
             mToolbar.setLayoutParams(params);
         }
+    }
+
+    /**
+     *  友盟统计
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

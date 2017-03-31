@@ -49,7 +49,7 @@ public class TabsRecyclerViewAdapter extends RecyclerView.Adapter<TabsRecyclerVi
     public void onBindViewHolder(TabsViewHolder holder, int position) {
         Glide.with(UIUtils.getContext()).load(data.get(position).picUrl)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.mipmap.ic_thumb_bg)  // 默认图片
+                .placeholder(R.drawable.ic_thumb_bg)  // 默认图片
                 .into(holder.pic);
         holder.title.setText(data.get(position).title + "?");
         holder.readCount.setText("阅读(" + data.get(position).readCount + ")");

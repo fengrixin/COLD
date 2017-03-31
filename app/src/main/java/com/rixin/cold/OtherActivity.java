@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.rixin.cold.fragment.others.SendAppFragment;
 import com.rixin.cold.fragment.others.SponsorFragment;
 import com.rixin.cold.fragment.others.StarFragment;
+import com.umeng.analytics.MobclickAgent;
 
 public class OtherActivity extends AppCompatActivity {
 
@@ -53,4 +54,19 @@ public class OtherActivity extends AppCompatActivity {
         }
         this.getSupportFragmentManager().beginTransaction().replace(R.id.content_other, mFragment).commit();
     }
+
+    /**
+     *  友盟统计
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

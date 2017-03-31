@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_14"
+            android:layout_margin="@dimen/dp_14"
             android:lineSpacingExtra="@dimen/dp_4"
             android:text="@string/my_name"
             android:textSize="@dimen/dp_24"

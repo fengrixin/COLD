@@ -81,3 +81,17 @@
 	-dontwarn com.mob.**
 	-dontwarn cn.sharesdk.**
 	-dontwarn **.R$*
+
+# 友盟混淆配置
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+
+-keep public class [com.rixin.cold].R$*{
+public static final int *;
+}
+
+-keepclassmembers enum * {
+   public static **[] values();
+   public static ** valueOf(java.lang.String);
+}

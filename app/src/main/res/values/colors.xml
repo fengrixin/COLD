@@ -9,4 +9,5 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhiteLittle">#FAFAFA</color>
     <color name="colorWhiteDark">#BDBDBD</color>
+    <color name="colorSplash">#0ce0dd</color>
 </resources>
