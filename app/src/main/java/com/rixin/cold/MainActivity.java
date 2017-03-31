@@ -1,8 +1,6 @@
 package com.rixin.cold;
 
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -26,8 +24,12 @@ import android.widget.TextView;
 import com.rixin.cold.fragment.BaseFragment;
 import com.rixin.cold.fragment.EverydayFragment;
 import com.rixin.cold.fragment.FragmentFactory;
+import com.rixin.cold.utils.InviteCommentUtil;
 import com.rixin.cold.utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
+
+import net.youmi.android.normal.spot.SpotManager;
+import net.youmi.android.normal.video.VideoAdManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,21 +63,28 @@ public class MainActivity extends AppCompatActivity
         headerView = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // 预加载数据（视频广告）
+
         initView();
     }
 
-    private String  getApplicationMetaValue(String name) {
-        String value= "";
-        try {
-            ApplicationInfo appInfo =getPackageManager()
-                    .getApplicationInfo(getPackageName(),
-                            PackageManager.GET_META_DATA);
-            value = appInfo.metaData.getString(name);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return value;
-    }
+//    /**
+//     *  获取当前渠道名称
+//     * @param name
+//     * @return
+//     */
+//    private String  getApplicationMetaValue(String name) {
+//        String value= "";
+//        try {
+//            ApplicationInfo appInfo =getPackageManager()
+//                    .getApplicationInfo(getPackageName(),
+//                            PackageManager.GET_META_DATA);
+//            value = appInfo.metaData.getString(name);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return value;
+//    }
 
     private void initView() {
 
@@ -102,6 +111,21 @@ public class MainActivity extends AppCompatActivity
         /** 每日一冷 */
         mFragment = new EverydayFragment();
         this.getSupportFragmentManager().beginTransaction().replace(R.id.content_main, mFragment).commit();
+
+        /** 邀请好评 */
+        InviteCommentUtil.startCommet(this, false);
+
+    }
+
+
+    /**
+     * 预加载数据
+     */
+    private void preloadData() {
+        // 设置服务器回调 userId，一定要在请求广告之前设置，否则无效
+        VideoAdManager.getInstance(this).setUserId("userId");
+        // 请求视频广告
+        VideoAdManager.getInstance(this).requestVideoAd(this);
     }
 
     /**
@@ -127,18 +151,16 @@ public class MainActivity extends AppCompatActivity
             mToolbar.setLayoutParams(params);
         }
     }
-
-    /**
-     *  友盟统计
-     */
     @Override
     protected void onResume() {
         super.onResume();
+        // 友盟统计
         MobclickAgent.onResume(this);
     }
     @Override
     protected void onPause() {
         super.onPause();
+        // 友盟统计
         MobclickAgent.onPause(this);
     }
 
@@ -150,6 +172,15 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 插屏广告（包括普通插屏广告、轮播插屏广告、原生插屏广告）
+        SpotManager.getInstance(this).onAppExit();
+        // 视频广告（包括普通视频广告、原生视频广告）
+        VideoAdManager.getInstance(this).onAppExit();
     }
 
     @Override
@@ -215,10 +246,8 @@ public class MainActivity extends AppCompatActivity
             toActivity(UIUtils.getString(R.string.nav_collect), 0);
         } else if (id == R.id.nav_sponsor) {
             toActivity(UIUtils.getString(R.string.nav_sponsor), 1);
-        } else if (id == R.id.nav_app) {
-            toActivity(UIUtils.getString(R.string.nav_app), 2);
         } else if (id == R.id.nav_discus) {
-
+            InviteCommentUtil.startCommet(this, true);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

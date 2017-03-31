@@ -23,10 +23,6 @@
                 android:id="@+id/nav_sponsor"
                 android:icon="@drawable/ic_menu_sponsor"
                 android:title="@string/nav_sponsor" />
-            <item
-                android:id="@+id/nav_app"
-                android:icon="@drawable/ic_menu_app"
-                android:title="@string/nav_app" />
             <item android:id="@+id/nav_discus"
                 android:icon="@drawable/ic_menu_discus"
                 android:title="@string/nav_discus"/>

@@ -7,11 +7,7 @@
         <!--设置Toolbar的高度-->
         <item name="actionBarSize">46dp</item>
     </style>
-    <style name="AppTheme.NoActionBar_Transparent">
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">true</item>
-        <!--设置Toolbar的高度-->
-        <item name="actionBarSize">46dp</item>
+    <style name="AppTheme.NoActionBar_Transparent" parent="AppTheme.NoActionBar">
     </style>
 
     <!--闪屏页的主题-->

@@ -27,13 +27,19 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/sp_18" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/btn_sponsor_ad"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp_10"
-                android:text="@string/sponsor_ad"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/dp_18" />
+                android:background="@color/colorSplash"
+                android:text="@string/sponsor_ad_clickable"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/sp_18"
+                android:layout_marginLeft="@dimen/dp_56"
+                android:layout_marginRight="@dimen/dp_56"
+                android:layout_marginTop="@dimen/dp_32"
+                android:layout_marginBottom="@dimen/dp_32"
+                />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -54,16 +60,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp_24"
-                android:text="@string/sponsor_copy_right"
-                android:textSize="@dimen/dp_16" />
+                android:layout_marginBottom="@dimen/dp_24"
+                android:layout_marginLeft="@dimen/dp_16"
+                android:layout_marginRight="@dimen/dp_16"
+                android:text="@string/sponsor_data"
+                android:textSize="@dimen/sp_16"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/dp_8"
-                android:text="@string/data_source"
-                android:textSize="@dimen/sp_10"/>
+                android:text="@string/sponsor_copy_right"
+                android:textSize="@dimen/sp_14" />
 
         </LinearLayout>
 

@@ -6,8 +6,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +25,9 @@ import com.rixin.cold.utils.RandomUtils;
 import com.rixin.cold.utils.ThreadManager;
 import com.rixin.cold.utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
+
+import net.youmi.android.normal.banner.BannerManager;
+import net.youmi.android.normal.banner.BannerViewListener;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -53,6 +59,7 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar_base);
         toolbar.setTitle(R.string.title_activity_details);
         toolbar.inflateMenu(R.menu.details_main);
@@ -67,7 +74,7 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
-                if(id == R.id.action_share){
+                if (id == R.id.action_share) {
                     // 分享
                     showShare();
                 }
@@ -75,9 +82,49 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
+        // 初始化分享
         ShareSDK.initSDK(this);
+        // 广告条
+        showBanner();
 
         initView();
+
+    }
+
+    /**
+     * 展示广告条
+     */
+    public void showBanner() {
+        /**
+         * 悬浮布局
+         */
+        // 实例化LayoutParams
+        FrameLayout.LayoutParams layoutParams =
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        // 设置广告条的悬浮位置，这里示例为右下角
+        layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+        // 获取广告条
+        final View bannerView = BannerManager.getInstance(this)
+                .getBannerView(this, new BannerViewListener() {
+
+                    @Override
+                    public void onRequestSuccess() {
+//                        logInfo("请求广告条成功");
+
+                    }
+
+                    @Override
+                    public void onSwitchBanner() {
+//                        logDebug("广告条切换");
+                    }
+
+                    @Override
+                    public void onRequestFailed() {
+//                        logError("请求广告条失败");
+                    }
+                });
+        // 添加广告条到窗口中
+        this.addContentView(bannerView, layoutParams);
 
     }
 
@@ -106,7 +153,7 @@ public class DetailsActivity extends AppCompatActivity {
                         public void run() {
                             if (mDetailsInfo != null) {
                                 Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).asBitmap().diskCacheStrategy(DiskCacheStrategy.ALL).into(mPic);
-                                mFrom.setText("文章来源："+ url);
+                                mFrom.setText("文章来源：" + url);
                                 mTitle.setText(mDetailsInfo.title + "?");
                                 mContent.setText(Html.fromHtml(mDetailsInfo.pContent));
                                 if (DBUtils.query(helper, mDetailsInfo.title)) {
@@ -128,7 +175,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     /**
-     *  收藏
+     * 收藏
      */
     public void starAble() {
         fab.setOnClickListener(new View.OnClickListener() {
@@ -235,16 +282,24 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     /**
-     *  友盟统计
+     * 友盟统计
      */
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 展示广告条窗口的 onDestroy() 回调方法中调用
+        BannerManager.getInstance(this).onDestroy();
     }
 }

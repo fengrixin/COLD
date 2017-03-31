@@ -18,8 +18,8 @@
             android:id="@+id/tv_details_from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorGray"
             android:padding="@dimen/dp_4"
+            android:textColor="@color/colorGray"
             android:textSize="@dimen/sp_10" />
 
         <TextView
@@ -37,7 +37,9 @@
             android:id="@+id/tv_details_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_16"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
             android:lineSpacingExtra="@dimen/dp_4"
             android:text="@string/loading"
             android:textColor="#424242"
@@ -46,9 +48,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_56"
             android:layout_marginLeft="@dimen/dp_16"
-            android:layout_marginBottom="@dimen/dp_12"
-            android:layout_marginTop="@dimen/dp_16"
             android:orientation="horizontal">
 
             <TextView
@@ -68,6 +69,7 @@
                 android:textColor="#BDBDBD"
                 android:textSize="@dimen/sp_14" />
         </LinearLayout>
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

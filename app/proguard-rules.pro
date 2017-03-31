@@ -95,3 +95,11 @@ public static final int *;
    public static **[] values();
    public static ** valueOf(java.lang.String);
 }
+
+
+# 有米广告混淆配置
+-keep public class com.mi.adtracker.MiAdTracker{ *; }
+
+-keep public class android.support.**{
+    *;
+}

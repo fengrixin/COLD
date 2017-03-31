@@ -4,19 +4,13 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <!--<item name="android:statusBarColor">@android:color/transparent</item> 透明的-->
         <item name="android:statusBarColor">@color/colorPrimary</item>
         <!--设置Toolbar的高度-->
         <item name="android:actionBarSize">46dp</item>
     </style>
-    <style name="AppTheme.NoActionBar_Transparent">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+    <style name="AppTheme.NoActionBar_Transparent" parent="AppTheme.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item> 透明的
-        <!--<item name="android:statusBarColor">@color/colorPrimary</item>-->
-        <!--设置Toolbar的高度-->
-        <item name="android:actionBarSize">46dp</item>
     </style>
 
     <!--闪屏页的主题-->

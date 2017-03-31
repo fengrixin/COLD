@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.rixin.cold.fragment.others.SendAppFragment;
 import com.rixin.cold.fragment.others.SponsorFragment;
 import com.rixin.cold.fragment.others.StarFragment;
 import com.umeng.analytics.MobclickAgent;
@@ -47,9 +46,6 @@ public class OtherActivity extends AppCompatActivity {
                 break;
             case 1:
                 mFragment = new SponsorFragment();
-                break;
-            case 2:
-                mFragment = new SendAppFragment();
                 break;
         }
         this.getSupportFragmentManager().beginTransaction().replace(R.id.content_other, mFragment).commit();

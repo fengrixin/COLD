@@ -16,6 +16,10 @@ import android.widget.EditText;
 import com.rixin.cold.fragment.others.SearchResultFragment;
 import com.umeng.analytics.MobclickAgent;
 
+import net.youmi.android.normal.common.ErrorCode;
+import net.youmi.android.normal.spot.SpotListener;
+import net.youmi.android.normal.spot.SpotManager;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -29,6 +33,9 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        // 显示插屏广告
+        setupSlideableSpotAd();
 
         /** 设置Toolbar */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_search);
@@ -59,7 +66,7 @@ public class SearchActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(etSearch.requestFocus() && !etSearch.getText().toString().isEmpty()) {
+                if (etSearch.requestFocus() && !etSearch.getText().toString().isEmpty()) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 }
@@ -91,17 +98,111 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     /**
-     *  友盟统计
+     * 设置轮播插屏广告
      */
+    private void setupSlideableSpotAd() {
+        // 设置插屏图片类型，默认竖图
+        //		// 横图
+        //		SpotManager.getInstance(mContext).setImageType(SpotManager
+        // .IMAGE_TYPE_HORIZONTAL);
+        // 竖图
+        SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
+
+        // 设置动画类型，默认高级动画
+        //		// 无动画
+        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
+        // .ANIMATION_TYPE_NONE);
+        //		// 简单动画
+        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
+        // .ANIMATION_TYPE_SIMPLE);
+        // 高级动画
+        SpotManager.getInstance(this)
+                .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
+
+        // 展示轮播插屏广告
+        SpotManager.getInstance(this)
+                .showSlideableSpot(this, new SpotListener() {
+
+                    @Override
+                    public void onShowSuccess() {
+//                                logInfo("轮播插屏展示成功");
+                    }
+
+                    @Override
+                    public void onShowFailed(int errorCode) {
+//                                logError("轮播插屏展示失败");
+                        switch (errorCode) {
+                            case ErrorCode.NON_NETWORK:
+//                                showShortToast("网络异常");
+                                break;
+                            case ErrorCode.NON_AD:
+//                                showShortToast("暂无轮播插屏广告");
+                                break;
+                            case ErrorCode.RESOURCE_NOT_READY:
+//                                showShortToast("轮播插屏资源还没准备好");
+                                break;
+                            case ErrorCode.SHOW_INTERVAL_LIMITED:
+//                                showShortToast("请勿频繁展示");
+                                break;
+                            case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
+//                                showShortToast("请设置插屏为可见状态");
+                                break;
+                            default:
+//                                showShortToast("请稍后再试");
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onSpotClosed() {
+//                        logDebug("轮播插屏被关闭");
+                    }
+
+                    @Override
+                    public void onSpotClicked(boolean isWebPage) {
+//                        logDebug("轮播插屏被点击");
+//                        logInfo("是否是网页广告？%s", isWebPage ? "是" : "不是");
+                    }
+                });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 点击后退关闭轮播插屏广告
+        if (SpotManager.getInstance(this).isSlideableSpotShowing()) {
+            SpotManager.getInstance(this).hideSlideableSpot();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        // 友盟统计
         MobclickAgent.onResume(this);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
+        // 友盟统计
         MobclickAgent.onPause(this);
+        // 轮播插屏广告
+        SpotManager.getInstance(this).onPause();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // 轮播插屏广告
+        SpotManager.getInstance(this).onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 轮播插屏广告
+        SpotManager.getInstance(this).onDestroy();
+    }
 }
