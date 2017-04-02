@@ -17,3 +17,4 @@ my first app
 - 使用第三方 XRecyclerView 显示数据，并对齐进行简单的封装
 - 使用 SQLite 保存用户收藏的冷知识文章
 - 集成 ShareSDK、友盟统计，嵌入有米广告
+- 多渠道打包
