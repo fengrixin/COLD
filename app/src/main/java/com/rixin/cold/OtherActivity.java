@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.rixin.cold.fragment.others.SponsorFragment;
 import com.rixin.cold.fragment.others.StarFragment;
+import com.rixin.cold.utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 
 public class OtherActivity extends AppCompatActivity {
@@ -57,12 +58,12 @@ public class OtherActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(UIUtils.getContext());
     }
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(UIUtils.getContext());
     }
 
 }

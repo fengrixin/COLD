@@ -1,6 +1,8 @@
 package com.rixin.cold;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -19,7 +21,9 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rixin.cold.fragment.BaseFragment;
 import com.rixin.cold.fragment.EverydayFragment;
@@ -35,7 +39,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private TextView mTitle;
-//    private ImageView mUserIcon;
+    private ImageView mUserIcon;
     private BaseFragment mFragment;
     private TabLayout mTabs;
     private ViewPager mViewPager;
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // 预加载数据（视频广告）
+        preloadData();
 
         initView();
     }
@@ -91,14 +96,21 @@ public class MainActivity extends AppCompatActivity
         //获取当前时间
         firstTime = System.currentTimeMillis();
 
-//        /** 登录账号 */
-//        mUserIcon = (ImageView) headerView.findViewById(R.id.iv_userIcon);
-//        mUserIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(MainActivity.this, "登录账号", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        /** 显示当前版本号 */
+        mUserIcon = (ImageView) headerView.findViewById(R.id.iv_userIcon);
+        mUserIcon.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                try {
+                    PackageManager manager = getPackageManager();
+                    PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+                    Toast.makeText(MainActivity.this, "当前版本：v" + info.versionName, Toast.LENGTH_SHORT).show();
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+        });
 
         /** Toolbar标题 */
         mTitle = (TextView) this.findViewById(R.id.tv_app_title);
@@ -123,9 +135,9 @@ public class MainActivity extends AppCompatActivity
      */
     private void preloadData() {
         // 设置服务器回调 userId，一定要在请求广告之前设置，否则无效
-        VideoAdManager.getInstance(this).setUserId("userId");
+        VideoAdManager.getInstance(UIUtils.getContext()).setUserId("userId");
         // 请求视频广告
-        VideoAdManager.getInstance(this).requestVideoAd(this);
+        VideoAdManager.getInstance(UIUtils.getContext()).requestVideoAd(UIUtils.getContext());
     }
 
     /**
@@ -151,17 +163,19 @@ public class MainActivity extends AppCompatActivity
             mToolbar.setLayoutParams(params);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         // 友盟统计
-        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(UIUtils.getContext());
     }
+
     @Override
     protected void onPause() {
         super.onPause();
         // 友盟统计
-        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(UIUtils.getContext());
     }
 
     @Override
@@ -177,10 +191,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // 退出应用时调用，用于释放资源
+        // 如果无法保证应用主界面的 onDestroy() 方法被执行到，请移动以下接口到应用的退出逻辑里面调用
+
         // 插屏广告（包括普通插屏广告、轮播插屏广告、原生插屏广告）
-        SpotManager.getInstance(this).onAppExit();
+        SpotManager.getInstance(UIUtils.getContext()).onAppExit();
         // 视频广告（包括普通视频广告、原生视频广告）
-        VideoAdManager.getInstance(this).onAppExit();
+        VideoAdManager.getInstance(UIUtils.getContext()).onAppExit();
     }
 
     @Override
@@ -189,7 +206,7 @@ public class MainActivity extends AppCompatActivity
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             long secondTime = System.currentTimeMillis();
             if (secondTime - firstTime > 1000) {
-                Snackbar.make(getWindow().getDecorView(),"再按一次退出应用",Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                Snackbar.make(getWindow().getDecorView(), "再按一次退出应用", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 firstTime = secondTime;
                 return true;
             } else {

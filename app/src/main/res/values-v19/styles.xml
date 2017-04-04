@@ -12,7 +12,7 @@
 
     <!--闪屏页的主题-->
     <style name="SplashTheme" parent="AppTheme.NoActionBar">
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/colorSplash</item>
         <item name="android:windowFullscreen">true</item>
     </style>
 

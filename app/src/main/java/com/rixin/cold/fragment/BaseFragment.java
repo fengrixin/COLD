@@ -116,9 +116,12 @@ public abstract class BaseFragment extends Fragment {
                 if (elements != null) {
                     for (Element element : elements) {
                         ColdInfo info = new ColdInfo();
+                        String contentUrl = element.select("header h2 a").attr("href");
+                        String[] strs = contentUrl.split("m/");
+                        info.id = strs[1];
                         info.title = element.select("header h2").text();
                         info.picUrl = element.select("img").attr("data-original");
-                        info.contentUrl = element.select("header h2 a").attr("href");
+                        info.contentUrl = contentUrl;
                         info.readCount = RandomUtils.getReadRandom();
                         info.starCount = RandomUtils.getStarRandom();
                         data.add(info);

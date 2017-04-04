@@ -34,7 +34,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        // 显示插屏广告
+        // 设置轮播插屏广告
         setupSlideableSpotAd();
 
         /** 设置Toolbar */
@@ -133,47 +133,47 @@ public class SearchActivity extends AppCompatActivity {
 //                                logError("轮播插屏展示失败");
                         switch (errorCode) {
                             case ErrorCode.NON_NETWORK:
-//                                showShortToast("网络异常");
+//                                        showShortToast("网络异常");
                                 break;
                             case ErrorCode.NON_AD:
-//                                showShortToast("暂无轮播插屏广告");
+//                                        showShortToast("暂无轮播插屏广告");
                                 break;
                             case ErrorCode.RESOURCE_NOT_READY:
-//                                showShortToast("轮播插屏资源还没准备好");
+//                                        showShortToast("轮播插屏资源还没准备好");
                                 break;
                             case ErrorCode.SHOW_INTERVAL_LIMITED:
-//                                showShortToast("请勿频繁展示");
+//                                        showShortToast("请勿频繁展示");
                                 break;
                             case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
-//                                showShortToast("请设置插屏为可见状态");
+//                                        showShortToast("请设置插屏为可见状态");
                                 break;
                             default:
-//                                showShortToast("请稍后再试");
+//                                        showShortToast("请稍后再试");
                                 break;
                         }
                     }
 
                     @Override
                     public void onSpotClosed() {
-//                        logDebug("轮播插屏被关闭");
+//                                logDebug("轮播插屏被关闭");
                     }
 
                     @Override
                     public void onSpotClicked(boolean isWebPage) {
-//                        logDebug("轮播插屏被点击");
-//                        logInfo("是否是网页广告？%s", isWebPage ? "是" : "不是");
+//                                logDebug("轮播插屏被点击");
+//                                logInfo("是否是网页广告？%s", isWebPage ? "是" : "不是");
                     }
                 });
     }
+
 
     @Override
     public void onBackPressed() {
         // 点击后退关闭轮播插屏广告
         if (SpotManager.getInstance(this).isSlideableSpotShowing()) {
             SpotManager.getInstance(this).hideSlideableSpot();
-        } else {
-            super.onBackPressed();
         }
+        super.onBackPressed();
     }
 
     @Override

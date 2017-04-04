@@ -1,9 +1,11 @@
 package com.rixin.cold.fragment.tabs;
 
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.rixin.cold.R;
 import com.rixin.cold.adapter.TabsRecyclerViewAdapter;
@@ -39,6 +41,17 @@ public class EncyclopediaFragment extends BaseFragment {
 
             @Override
             public void onItemClick(View view, int position) {
+                String readIds = SPUtils.getString(UIUtils.getContext(), "readIds", "");
+                // 没有 id 才追加，避免重复
+                if (!readIds.contains(mData.get(position - 1).id + "")) {
+                    readIds = readIds + mData.get(position - 1).id + ",";
+                    SPUtils.setString(UIUtils.getContext(), "readIds", readIds);
+                }
+                // 局部刷新
+                TextView tvTitle = (TextView) view.findViewById(R.id.tv_tabs_list_title);
+                tvTitle.setTextColor(Color.rgb(189, 189, 189));
+
+                // 跳转详情页
                 toDetailsPage(mData.get(position - 1).contentUrl, mData.get(position - 1).readCount, mData.get(position - 1).starCount);
             }
 

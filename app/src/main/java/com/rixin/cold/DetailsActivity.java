@@ -104,8 +104,8 @@ public class DetailsActivity extends AppCompatActivity {
         // 设置广告条的悬浮位置，这里示例为右下角
         layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
         // 获取广告条
-        final View bannerView = BannerManager.getInstance(this)
-                .getBannerView(this, new BannerViewListener() {
+        final View bannerView = BannerManager.getInstance(UIUtils.getContext())
+                .getBannerView(UIUtils.getContext(), new BannerViewListener() {
 
                     @Override
                     public void onRequestSuccess() {
@@ -278,7 +278,7 @@ public class DetailsActivity extends AppCompatActivity {
         // 隐藏编辑页面
         oks.setSilent(true);
         // 启动分享GUI
-        oks.show(this);
+        oks.show(UIUtils.getContext());
     }
 
     /**
@@ -287,19 +287,19 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(UIUtils.getContext());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(UIUtils.getContext());
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // 展示广告条窗口的 onDestroy() 回调方法中调用
-        BannerManager.getInstance(this).onDestroy();
+        BannerManager.getInstance(UIUtils.getContext()).onDestroy();
     }
 }

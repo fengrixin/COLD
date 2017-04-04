@@ -101,11 +101,12 @@ public class CacheUtils {
                     ColdInfo info = new ColdInfo();
                     String[] strs = line.split("-IOU-");
                     for (int i = 0; i < strs.length; i++) {
-                        info.title = strs[0];
-                        info.picUrl = strs[1];
-                        info.contentUrl = strs[2];
-                        info.readCount = Integer.parseInt(strs[3]);
-                        info.starCount = Integer.parseInt(strs[4]);
+                        info.id = strs[0];
+                        info.title = strs[1];
+                        info.picUrl = strs[2];
+                        info.contentUrl = strs[3];
+                        info.readCount = Integer.parseInt(strs[4]);
+                        info.starCount = Integer.parseInt(strs[5]);
                     }
                     data.add(info);
                 }

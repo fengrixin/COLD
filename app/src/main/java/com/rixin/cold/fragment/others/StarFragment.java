@@ -38,6 +38,7 @@ public class StarFragment extends BaseFragment {
         myRecyclerView = new MyRecyclerView(manager, mAdapter) {
             @Override
             public void onItemClick(View view, int position) {
+                // 跳转详情页
                 toDetailsPage(mData.get(position - 1).contentUrl, mData.get(position - 1).readCount, mData.get(position - 1).starCount);
             }
 
