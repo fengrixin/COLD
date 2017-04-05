@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.rixin.cold"
-        minSdkVersion 14
+        minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -23,7 +23,8 @@ android {
         release {
             zipAlignEnabled true  // 优化 java 字节码，提高运行效率
             minifyEnabled true  // 开启混淆
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro' // 配置内容
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // 配置内容
             shrinkResources true  // 移除无用的资源
             signingConfig signingConfigs.release
         }
@@ -33,6 +34,9 @@ android {
         abortOnError false
     }
     productFlavors {
+        anzhi{}
+        anzhuo{}
+        jifeng{}
         wandoujia {}
         _360 {}
         _91 {}

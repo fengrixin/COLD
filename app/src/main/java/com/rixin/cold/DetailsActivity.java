@@ -60,6 +60,9 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        // 广告条
+        showBanner();
+
         toolbar = (Toolbar) findViewById(R.id.toolbar_base);
         toolbar.setTitle(R.string.title_activity_details);
         toolbar.inflateMenu(R.menu.details_main);
@@ -84,8 +87,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         // 初始化分享
         ShareSDK.initSDK(this);
-        // 广告条
-        showBanner();
 
         initView();
 
@@ -104,27 +105,26 @@ public class DetailsActivity extends AppCompatActivity {
         // 设置广告条的悬浮位置，这里示例为右下角
         layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
         // 获取广告条
-        final View bannerView = BannerManager.getInstance(UIUtils.getContext())
-                .getBannerView(UIUtils.getContext(), new BannerViewListener() {
+        final View bannerView = BannerManager.getInstance(this)
+                .getBannerView(this, new BannerViewListener() {
 
                     @Override
                     public void onRequestSuccess() {
-//                        logInfo("请求广告条成功");
-
+//                        System.out.println("请求广告条成功");
                     }
 
                     @Override
                     public void onSwitchBanner() {
-//                        logDebug("广告条切换");
+//                        System.out.println("广告条切换");
                     }
 
                     @Override
                     public void onRequestFailed() {
-//                        logError("请求广告条失败");
+//                        System.out.println("请求广告条失败");
                     }
                 });
         // 添加广告条到窗口中
-        this.addContentView(bannerView, layoutParams);
+        addContentView(bannerView, layoutParams);
 
     }
 
@@ -300,6 +300,6 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // 展示广告条窗口的 onDestroy() 回调方法中调用
-        BannerManager.getInstance(UIUtils.getContext()).onDestroy();
+        BannerManager.getInstance(this).onDestroy();
     }
 }

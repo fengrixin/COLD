@@ -64,7 +64,7 @@
                 android:id="@+id/tv_details_star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginLeft="@dimen/dp_16"
                 android:text="赞(121)"
                 android:textColor="#BDBDBD"
                 android:textSize="@dimen/sp_14" />

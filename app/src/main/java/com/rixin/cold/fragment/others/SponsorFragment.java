@@ -55,42 +55,42 @@ public class SponsorFragment extends Fragment {
                 .showVideoAd(getContext(), videoAdSettings, new VideoAdListener() {
                     @Override
                     public void onPlayStarted() {
-//                                logDebug("开始播放视频");
+//                        System.out.println("开始播放视频");
                     }
 
                     @Override
                     public void onPlayInterrupted() {
-//                                showShortToast("播放视频被中断");
+//                        System.out.println("播放视频被中断");
                     }
 
                     @Override
                     public void onPlayFailed(int errorCode) {
-//                                logError("视频播放失败");
+//                        System.out.println("视频播放失败");
                         switch (errorCode) {
                             case ErrorCode.NON_NETWORK:
-//                                        logError("网络异常");
+//                                System.out.println("网络异常");
                                 break;
                             case ErrorCode.NON_AD:
-//                                        logError("视频暂无广告");
+//                                System.out.println("视频暂无广告");
                                 break;
                             case ErrorCode.RESOURCE_NOT_READY:
-//                                        logError("视频资源还没准备好");
+//                                System.out.println("视频资源还没准备好");
                                 break;
                             case ErrorCode.SHOW_INTERVAL_LIMITED:
-//                                        logError("视频展示间隔限制");
+//                                System.out.println("视频展示间隔限制");
                                 break;
                             case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
-//                                        logError("视频控件处在不可见状态");
+//                                System.out.println("视频控件处在不可见状态");
                                 break;
                             default:
-//                                        logError("请稍后再试");
+//                                System.out.println("请稍后再试");
                                 break;
                         }
                     }
 
                     @Override
                     public void onPlayCompleted() {
-//                                showShortToast("视频播放成功");
+//                        System.out.println("视频播放成功");
                     }
                 });
     }

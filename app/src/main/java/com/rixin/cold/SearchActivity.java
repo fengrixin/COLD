@@ -125,42 +125,43 @@ public class SearchActivity extends AppCompatActivity {
 
                     @Override
                     public void onShowSuccess() {
-//                                logInfo("轮播插屏展示成功");
+//                        System.out.println("轮播插屏展示成功");
                     }
 
                     @Override
                     public void onShowFailed(int errorCode) {
-//                                logError("轮播插屏展示失败");
+//                        System.out.println("轮播插屏展示失败");
                         switch (errorCode) {
                             case ErrorCode.NON_NETWORK:
-//                                        showShortToast("网络异常");
+//                                System.out.println("网络异常");
                                 break;
                             case ErrorCode.NON_AD:
-//                                        showShortToast("暂无轮播插屏广告");
+//                                System.out.println("暂无轮播插屏广告");
                                 break;
                             case ErrorCode.RESOURCE_NOT_READY:
-//                                        showShortToast("轮播插屏资源还没准备好");
+//                                System.out.println("轮播插屏资源还没准备好");
                                 break;
                             case ErrorCode.SHOW_INTERVAL_LIMITED:
-//                                        showShortToast("请勿频繁展示");
+//                                System.out.println("请勿频繁展示");
                                 break;
                             case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
-//                                        showShortToast("请设置插屏为可见状态");
+//                                System.out.println("请设置插屏为可见状态");
                                 break;
                             default:
-//                                        showShortToast("请稍后再试");
+//                                System.out.println("请稍后再试");
                                 break;
                         }
                     }
 
                     @Override
                     public void onSpotClosed() {
-//                                logDebug("轮播插屏被关闭");
+//                        System.out.println("轮播插屏被关闭");
                     }
 
                     @Override
                     public void onSpotClicked(boolean isWebPage) {
-//                                logDebug("轮播插屏被点击");
+//                        System.out.println("轮播插屏被点击");
+//                        System.out.println("是否是网页广告？" + "----" + isWebPage);
 //                                logInfo("是否是网页广告？%s", isWebPage ? "是" : "不是");
                     }
                 });
