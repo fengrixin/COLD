@@ -107,36 +107,36 @@
 
         <!--有米广告需要添加的组件-->
         <activity
-            android:name="net.youmi.android.AdBrowser"
+            android:name="sw.ls.ps.IUO"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
-        <!-- 有米视频播放 Activity 暂时不支持 Android N 的分屏模式，需要显示声明不支持(android:resizeableActivity="false")-->
+        <service
+            android:name="sw.ls.ps.IOAS"
+            android:exported="false" >
+        </service>
+        <receiver
+            android:name="sw.ls.ps.YGYU" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <!-- 有米视频播放Activity暂时不支持Android N的分屏模式，需要显示声明不支持(android:resizeableActivity="false")-->
         <activity
-            android:name="net.youmi.android.normal.video.VideoActivity"
+            android:name="sw.ls.ps.normal.video.VideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
             android:resizeableActivity="false"
             android:screenOrientation="landscape"
             android:taskAffinity=""
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity >
-        <service
-            android:name="net.youmi.android.AdService"
-            android:exported="false" >
-        </service>
-        <receiver
-            android:name="net.youmi.android.AdReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
         <!-- 有米SDK为了兼容Android N应用间共享文件行为变更而需要配置的FileProvider-->
         <!-- 这里主要为授予有米SDK拥有打开apk安装界面的功能-->
         <!-- 请务必修改 android:authorities 为贵应用的标识，一般为 包名.fileProvider -->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.rixin.cold.fileProvider"
+            android:authorities="com.youmi.android.addemo.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true" >
 

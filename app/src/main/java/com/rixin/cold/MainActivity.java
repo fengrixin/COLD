@@ -32,8 +32,8 @@ import com.rixin.cold.utils.InviteCommentUtil;
 import com.rixin.cold.utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 
-import net.youmi.android.normal.spot.SpotManager;
-import net.youmi.android.normal.video.VideoAdManager;
+import sw.ls.ps.normal.spot.SpotManager;
+import sw.ls.ps.normal.video.VideoAdManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

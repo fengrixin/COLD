@@ -16,12 +16,12 @@ import android.widget.EditText;
 import com.rixin.cold.fragment.others.SearchResultFragment;
 import com.umeng.analytics.MobclickAgent;
 
-import net.youmi.android.normal.common.ErrorCode;
-import net.youmi.android.normal.spot.SpotListener;
-import net.youmi.android.normal.spot.SpotManager;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import sw.ls.ps.normal.common.ErrorCode;
+import sw.ls.ps.normal.spot.SpotListener;
+import sw.ls.ps.normal.spot.SpotManager;
 
 public class SearchActivity extends AppCompatActivity {
 

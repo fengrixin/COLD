@@ -26,9 +26,6 @@ import com.rixin.cold.utils.ThreadManager;
 import com.rixin.cold.utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 
-import net.youmi.android.normal.banner.BannerManager;
-import net.youmi.android.normal.banner.BannerViewListener;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,6 +33,8 @@ import org.jsoup.select.Elements;
 
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import sw.ls.ps.normal.banner.BannerManager;
+import sw.ls.ps.normal.banner.BannerViewListener;
 
 public class DetailsActivity extends AppCompatActivity {
 

@@ -10,10 +10,10 @@ import android.widget.Button;
 
 import com.rixin.cold.R;
 
-import net.youmi.android.normal.common.ErrorCode;
-import net.youmi.android.normal.video.VideoAdListener;
-import net.youmi.android.normal.video.VideoAdManager;
-import net.youmi.android.normal.video.VideoAdSettings;
+import sw.ls.ps.normal.common.ErrorCode;
+import sw.ls.ps.normal.video.VideoAdListener;
+import sw.ls.ps.normal.video.VideoAdManager;
+import sw.ls.ps.normal.video.VideoAdSettings;
 
 /**
  * 赞助我们
@@ -44,7 +44,9 @@ public class SponsorFragment extends Fragment {
      */
     private void setupVideoAd() {
         // 设置视频广告
-        final VideoAdSettings videoAdSettings = new VideoAdSettings();
+        VideoAdSettings videoAdSettings = new VideoAdSettings();
+        // 设置暗色加载 Logo
+        videoAdSettings.setDarkLoadingLogo("正在拼命加载中...");
         videoAdSettings.setInterruptTips("观看完整视频以支持我们 -->" + "\r\n\r\n不再支持?");
 
         // 只需要调用一次，由于在主页窗口中已经调用了一次，所以此处无需调用
