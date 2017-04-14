@@ -32,7 +32,6 @@ import com.rixin.cold.utils.InviteCommentUtil;
 import com.rixin.cold.utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
 
-import sw.ls.ps.normal.spot.SpotManager;
 import sw.ls.ps.normal.video.VideoAdManager;
 
 public class MainActivity extends AppCompatActivity
@@ -195,7 +194,7 @@ public class MainActivity extends AppCompatActivity
         // 如果无法保证应用主界面的 onDestroy() 方法被执行到，请移动以下接口到应用的退出逻辑里面调用
 
         // 插屏广告（包括普通插屏广告、轮播插屏广告、原生插屏广告）
-        SpotManager.getInstance(UIUtils.getContext()).onAppExit();
+//        SpotManager.getInstance(UIUtils.getContext()).onAppExit();
         // 视频广告（包括普通视频广告、原生视频广告）
         VideoAdManager.getInstance(UIUtils.getContext()).onAppExit();
     }

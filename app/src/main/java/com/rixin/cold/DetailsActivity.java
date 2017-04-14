@@ -6,11 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,8 +30,6 @@ import org.jsoup.select.Elements;
 
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
-import sw.ls.ps.normal.banner.BannerManager;
-import sw.ls.ps.normal.banner.BannerViewListener;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -60,7 +55,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         // 广告条
-        showBanner();
+//        showBanner();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_base);
         toolbar.setTitle(R.string.title_activity_details);
@@ -94,38 +89,38 @@ public class DetailsActivity extends AppCompatActivity {
     /**
      * 展示广告条
      */
-    public void showBanner() {
-        /**
-         * 悬浮布局
-         */
-        // 实例化LayoutParams
-        FrameLayout.LayoutParams layoutParams =
-                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        // 设置广告条的悬浮位置，这里示例为右下角
-        layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-        // 获取广告条
-        final View bannerView = BannerManager.getInstance(this)
-                .getBannerView(this, new BannerViewListener() {
-
-                    @Override
-                    public void onRequestSuccess() {
-//                        System.out.println("请求广告条成功");
-                    }
-
-                    @Override
-                    public void onSwitchBanner() {
-//                        System.out.println("广告条切换");
-                    }
-
-                    @Override
-                    public void onRequestFailed() {
-//                        System.out.println("请求广告条失败");
-                    }
-                });
-        // 添加广告条到窗口中
-        addContentView(bannerView, layoutParams);
-
-    }
+//    public void showBanner() {
+//        /**
+//         * 悬浮布局
+//         */
+//        // 实例化LayoutParams
+//        FrameLayout.LayoutParams layoutParams =
+//                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        // 设置广告条的悬浮位置，这里示例为右下角
+//        layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+//        // 获取广告条
+//        final View bannerView = BannerManager.getInstance(this)
+//                .getBannerView(this, new BannerViewListener() {
+//
+//                    @Override
+//                    public void onRequestSuccess() {
+////                        System.out.println("请求广告条成功");
+//                    }
+//
+//                    @Override
+//                    public void onSwitchBanner() {
+////                        System.out.println("广告条切换");
+//                    }
+//
+//                    @Override
+//                    public void onRequestFailed() {
+////                        System.out.println("请求广告条失败");
+//                    }
+//                });
+//        // 添加广告条到窗口中
+//        addContentView(bannerView, layoutParams);
+//
+//    }
 
     private void initView() {
         helper = new ColdDBOpenHelper(UIUtils.getContext());
@@ -299,6 +294,6 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // 展示广告条窗口的 onDestroy() 回调方法中调用
-        BannerManager.getInstance(this).onDestroy();
+//        BannerManager.getInstance(this).onDestroy();
     }
 }

@@ -19,10 +19,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import sw.ls.ps.normal.common.ErrorCode;
-import sw.ls.ps.normal.spot.SpotListener;
-import sw.ls.ps.normal.spot.SpotManager;
-
 public class SearchActivity extends AppCompatActivity {
 
     private Button btnSearch;
@@ -35,7 +31,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         // 设置轮播插屏广告
-        setupSlideableSpotAd();
+//        setupSlideableSpotAd();
 
         /** 设置Toolbar */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_search);
@@ -100,80 +96,80 @@ public class SearchActivity extends AppCompatActivity {
     /**
      * 设置轮播插屏广告
      */
-    private void setupSlideableSpotAd() {
-        // 设置插屏图片类型，默认竖图
-        //		// 横图
-        //		SpotManager.getInstance(mContext).setImageType(SpotManager
-        // .IMAGE_TYPE_HORIZONTAL);
-        // 竖图
-        SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
-
-        // 设置动画类型，默认高级动画
-        //		// 无动画
-        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
-        // .ANIMATION_TYPE_NONE);
-        //		// 简单动画
-        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
-        // .ANIMATION_TYPE_SIMPLE);
-        // 高级动画
-        SpotManager.getInstance(this)
-                .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
-
-        // 展示轮播插屏广告
-        SpotManager.getInstance(this)
-                .showSlideableSpot(this, new SpotListener() {
-
-                    @Override
-                    public void onShowSuccess() {
-//                        System.out.println("轮播插屏展示成功");
-                    }
-
-                    @Override
-                    public void onShowFailed(int errorCode) {
-//                        System.out.println("轮播插屏展示失败");
-                        switch (errorCode) {
-                            case ErrorCode.NON_NETWORK:
-//                                System.out.println("网络异常");
-                                break;
-                            case ErrorCode.NON_AD:
-//                                System.out.println("暂无轮播插屏广告");
-                                break;
-                            case ErrorCode.RESOURCE_NOT_READY:
-//                                System.out.println("轮播插屏资源还没准备好");
-                                break;
-                            case ErrorCode.SHOW_INTERVAL_LIMITED:
-//                                System.out.println("请勿频繁展示");
-                                break;
-                            case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
-//                                System.out.println("请设置插屏为可见状态");
-                                break;
-                            default:
-//                                System.out.println("请稍后再试");
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onSpotClosed() {
-//                        System.out.println("轮播插屏被关闭");
-                    }
-
-                    @Override
-                    public void onSpotClicked(boolean isWebPage) {
-//                        System.out.println("轮播插屏被点击");
-//                        System.out.println("是否是网页广告？" + "----" + isWebPage);
-//                                logInfo("是否是网页广告？%s", isWebPage ? "是" : "不是");
-                    }
-                });
-    }
+//    private void setupSlideableSpotAd() {
+//        // 设置插屏图片类型，默认竖图
+//        //		// 横图
+//        //		SpotManager.getInstance(mContext).setImageType(SpotManager
+//        // .IMAGE_TYPE_HORIZONTAL);
+//        // 竖图
+//        SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
+//
+//        // 设置动画类型，默认高级动画
+//        //		// 无动画
+//        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
+//        // .ANIMATION_TYPE_NONE);
+//        //		// 简单动画
+//        //		SpotManager.getInstance(mContext).setAnimationType(SpotManager
+//        // .ANIMATION_TYPE_SIMPLE);
+//        // 高级动画
+//        SpotManager.getInstance(this)
+//                .setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
+//
+//        // 展示轮播插屏广告
+//        SpotManager.getInstance(this)
+//                .showSlideableSpot(this, new SpotListener() {
+//
+//                    @Override
+//                    public void onShowSuccess() {
+////                        System.out.println("轮播插屏展示成功");
+//                    }
+//
+//                    @Override
+//                    public void onShowFailed(int errorCode) {
+////                        System.out.println("轮播插屏展示失败");
+//                        switch (errorCode) {
+//                            case ErrorCode.NON_NETWORK:
+////                                System.out.println("网络异常");
+//                                break;
+//                            case ErrorCode.NON_AD:
+////                                System.out.println("暂无轮播插屏广告");
+//                                break;
+//                            case ErrorCode.RESOURCE_NOT_READY:
+////                                System.out.println("轮播插屏资源还没准备好");
+//                                break;
+//                            case ErrorCode.SHOW_INTERVAL_LIMITED:
+////                                System.out.println("请勿频繁展示");
+//                                break;
+//                            case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
+////                                System.out.println("请设置插屏为可见状态");
+//                                break;
+//                            default:
+////                                System.out.println("请稍后再试");
+//                                break;
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onSpotClosed() {
+////                        System.out.println("轮播插屏被关闭");
+//                    }
+//
+//                    @Override
+//                    public void onSpotClicked(boolean isWebPage) {
+////                        System.out.println("轮播插屏被点击");
+////                        System.out.println("是否是网页广告？" + "----" + isWebPage);
+////                                logInfo("是否是网页广告？%s", isWebPage ? "是" : "不是");
+//                    }
+//                });
+//    }
 
 
     @Override
     public void onBackPressed() {
-        // 点击后退关闭轮播插屏广告
-        if (SpotManager.getInstance(this).isSlideableSpotShowing()) {
-            SpotManager.getInstance(this).hideSlideableSpot();
-        }
+//        // 点击后退关闭轮播插屏广告
+//        if (SpotManager.getInstance(this).isSlideableSpotShowing()) {
+//            SpotManager.getInstance(this).hideSlideableSpot();
+//        }
         super.onBackPressed();
     }
 
@@ -190,20 +186,20 @@ public class SearchActivity extends AppCompatActivity {
         // 友盟统计
         MobclickAgent.onPause(this);
         // 轮播插屏广告
-        SpotManager.getInstance(this).onPause();
+//        SpotManager.getInstance(this).onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         // 轮播插屏广告
-        SpotManager.getInstance(this).onStop();
+//        SpotManager.getInstance(this).onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // 轮播插屏广告
-        SpotManager.getInstance(this).onDestroy();
+//        SpotManager.getInstance(this).onDestroy();
     }
 }

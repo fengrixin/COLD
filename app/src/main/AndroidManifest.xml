@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.rixin.cold">
 
     <!--公共所需的权限-->
@@ -17,13 +16,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-    <!--有米广告所需的权限-->
+    <!--广告所需的权限-->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- 如果使用积分墙广告,还需要配置下面权限 -->
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission
-        android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
     <!-- 以下为可选权限 -->
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
@@ -105,7 +99,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!--有米广告需要添加的组件-->
+        <!--广告需要添加的组件-->
         <activity
             android:name="sw.ls.ps.IUO"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
@@ -122,7 +116,7 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <!-- 有米视频播放Activity暂时不支持Android N的分屏模式，需要显示声明不支持(android:resizeableActivity="false")-->
+        <!-- 视频播放Activity暂时不支持Android N的分屏模式，需要显示声明不支持(android:resizeableActivity="false")-->
         <activity
             android:name="sw.ls.ps.normal.video.VideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
@@ -131,8 +125,8 @@
             android:taskAffinity=""
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity >
-        <!-- 有米SDK为了兼容Android N应用间共享文件行为变更而需要配置的FileProvider-->
-        <!-- 这里主要为授予有米SDK拥有打开apk安装界面的功能-->
+        <!-- SDK为了兼容Android N应用间共享文件行为变更而需要配置的FileProvider-->
+        <!-- 这里主要为授予SDK拥有打开apk安装界面的功能-->
         <!-- 请务必修改 android:authorities 为贵应用的标识，一般为 包名.fileProvider -->
         <provider
             android:name="android.support.v4.content.FileProvider"

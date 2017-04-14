@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // 初始化有米广告，倒数第二个参数在上传有米广告或应用市场时设置为 false，最后一个参数在发布市场时务必设置为 false
+        // 初始化广告，倒数第二个参数在上传广告或应用市场时设置为 false，最后一个参数在发布市场时务必设置为 false
         AdManager.getInstance(this).init("e82926b8aabdb9c2", "3de174a8bc7a0806", false);
 
         RelativeLayout relativeLayout = (RelativeLayout) this.findViewById(R.id.activity_splash);
