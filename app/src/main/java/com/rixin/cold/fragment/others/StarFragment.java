@@ -1,6 +1,8 @@
 package com.rixin.cold.fragment.others;
 
+import android.content.DialogInterface;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -29,18 +31,11 @@ public class StarFragment extends BaseFragment {
     private MyRecyclerView myRecyclerView;
     private TabsRecyclerViewAdapter mAdapter;
 
-    private int count = 0;
-
     @Override
     public View onCreateSuccessPage() {
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL);
-        mAdapter = new TabsRecyclerViewAdapter(mData, R.layout.recycler_list_item_stagger);
+        mAdapter = new TabsRecyclerViewAdapter(UIUtils.getContext(), mData, R.layout.recycler_list_item_stagger);
         myRecyclerView = new MyRecyclerView(manager, mAdapter) {
-            @Override
-            public void onItemClick(View view, int position) {
-                // 跳转详情页
-                toDetailsPage(mData.get(position - 1).contentUrl, mData.get(position - 1).readCount, mData.get(position - 1).starCount);
-            }
 
             @Override
             public void onRefresh() {
@@ -55,7 +50,7 @@ public class StarFragment extends BaseFragment {
 
             @Override
             public void onLoadMore() {
-                Snackbar.make(getView(), "到底了哦，没有更多的收藏冷知识了...", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                Snackbar.make(getView(), "到底了哦，没有更多的收藏冷知识了...", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             }
         };
         return myRecyclerView.getView();
@@ -65,15 +60,29 @@ public class StarFragment extends BaseFragment {
     public LoadingPage.ResultState onLoadData() {
         helper = new ColdDBOpenHelper(UIUtils.getContext());
         mData = DBUtils.query(helper);
-        count++;
+        if (mData.isEmpty()) {
+            UIUtils.runOnUIThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("您暂时还没有收藏内容哦，请收藏后再查看哈~")
+                            .setCancelable(false)
+                            .setPositiveButton("好的呢", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    getActivity().finish();
+                                }
+                            }).show();
+                }
+            });
+            return null;
+        }
         return check(mData);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(count > 0) {
-            myRecyclerView.onRefresh();
-        }
     }
 }

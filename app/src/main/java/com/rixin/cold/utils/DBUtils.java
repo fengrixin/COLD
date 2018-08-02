@@ -21,17 +21,15 @@ public class DBUtils {
      * @param title
      * @param picUrl
      * @param read
-     * @param star
      * @return
      */
-    public static boolean insert(ColdDBOpenHelper helper, String title, String picUrl, String contentUrl, int read, int star) {
+    public static boolean insert(ColdDBOpenHelper helper, String title, String picUrl, String contentUrl, int read) {
         SQLiteDatabase db = helper.getWritableDatabase();  // 打开读写的数据库
         ContentValues values = new ContentValues();
         values.put("title", title);
         values.put("picUrl", picUrl);
         values.put("contentUrl", contentUrl);
         values.put("read", read);
-        values.put("star", star);
         long i = db.insert("cold", null, values);
         db.close();
         if (i == -1) {
@@ -69,11 +67,10 @@ public class DBUtils {
         ArrayList<ColdInfo> list = new ArrayList<>();
         while (cursor.moveToNext()) {
             ColdInfo info = new ColdInfo();
-            info.title = cursor.getString(cursor.getColumnIndex("title"));
-            info.picUrl = cursor.getString(cursor.getColumnIndex("picUrl"));
-            info.contentUrl = cursor.getString(cursor.getColumnIndex("contentUrl"));
-            info.readCount = cursor.getInt(cursor.getColumnIndex("read"));
-            info.starCount = cursor.getInt(cursor.getColumnIndex("star"));
+            info.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+            info.setPicUrl(cursor.getString(cursor.getColumnIndex("picUrl")));
+            info.setContentUrl(cursor.getString(cursor.getColumnIndex("contentUrl")));
+            info.setReadCount(cursor.getInt(cursor.getColumnIndex("read")));
             list.add(info);
         }
         cursor.close();

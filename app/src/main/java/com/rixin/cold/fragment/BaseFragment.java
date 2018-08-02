@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.view.ViewGroup;
 import com.rixin.cold.DetailsActivity;
 import com.rixin.cold.domain.ColdInfo;
 import com.rixin.cold.global.GlobalConstants;
-import com.rixin.cold.utils.RandomUtils;
 import com.rixin.cold.utils.UIUtils;
 import com.rixin.cold.widget.LoadingPage;
 import com.umeng.analytics.MobclickAgent;
@@ -36,13 +36,14 @@ public abstract class BaseFragment extends Fragment {
     private LoadingPage loadingPage;
 
     /**
-     *  友盟统计
+     * 友盟统计
      */
     @Override
     public void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(getClass().getName());
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -112,18 +113,21 @@ public abstract class BaseFragment extends Fragment {
         try {
             Document document = Jsoup.connect(url).get();
             if (document != null) {
-                Elements elements = document.select("article");
+                Elements elements = document.select(".post");
                 if (elements != null) {
                     for (Element element : elements) {
                         ColdInfo info = new ColdInfo();
-                        String contentUrl = element.select("header h2 a").attr("href");
-                        String[] strs = contentUrl.split("m/");
-                        info.id = strs[1];
-                        info.title = element.select("header h2").text();
-                        info.picUrl = element.select("img").attr("data-original");
-                        info.contentUrl = contentUrl;
-                        info.readCount = RandomUtils.getReadRandom();
-                        info.starCount = RandomUtils.getStarRandom();
+                        String contentUrl = element.select(".zi a").attr("href");
+                        String[] strs = contentUrl.split("post/");
+                        info.setId(strs[1]);
+                        info.setTitle(element.select(".zi h2").text());
+                        info.setPicUrl(element.select(".zi a img").attr("src"));
+                        info.setContentUrl(contentUrl);
+                        // 选择阅读数所在节点
+                        String str = element.select(".zi em").text();
+                        String[] splits = str.split("\\|");
+                        String[] reads = splits[splits.length - 1].split("个");
+                        info.setReadCount(Integer.parseInt(reads[0].trim()) + 100);
                         data.add(info);
                     }
                 }
@@ -166,11 +170,10 @@ public abstract class BaseFragment extends Fragment {
      *
      * @param url
      */
-    public void toDetailsPage(String url, int read, int star) {
+    public void toDetailsPage(String url, int read) {
         Intent intent = new Intent(getActivity(), DetailsActivity.class);
         intent.putExtra(GlobalConstants.DETAILS_URL_KEY, url);
         intent.putExtra(GlobalConstants.READCOUNT_KEY, read);
-        intent.putExtra(GlobalConstants.STARCOUNT_KEY, star);
         startActivity(intent);
     }
 

@@ -1,15 +1,18 @@
 package com.rixin.cold;
 
+import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 
 import com.umeng.analytics.MobclickAgent;
-
-import sw.ls.ps.AdManager;
+import com.umeng.message.PushAgent;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -18,13 +21,12 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // 初始化广告，倒数第二个参数在上传广告或应用市场时设置为 false，最后一个参数在发布市场时务必设置为 false
-        AdManager.getInstance(this).init("e82926b8aabdb9c2", "3de174a8bc7a0806", false);
+        PushAgent.getInstance(this).onAppStart();
 
         RelativeLayout relativeLayout = (RelativeLayout) this.findViewById(R.id.activity_splash);
 
         AlphaAnimation alphaAnimation = new AlphaAnimation(0.1f, 1.0f);
-        alphaAnimation.setDuration(2500);
+        alphaAnimation.setDuration(2000);
         relativeLayout.setAnimation(alphaAnimation);
         alphaAnimation.start();
 
@@ -48,13 +50,14 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     /**
-     *  友盟统计
+     * 友盟统计
      */
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     protected void onPause() {
         super.onPause();

@@ -1,10 +1,11 @@
 package com.rixin.cold.widget;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.github.nukc.LoadMoreWrapper.LoadMoreAdapter;
+import com.github.nukc.LoadMoreWrapper.LoadMoreWrapper;
 import com.rixin.cold.R;
 import com.rixin.cold.utils.ThreadManager;
 import com.rixin.cold.utils.UIUtils;
@@ -16,7 +17,8 @@ import com.rixin.cold.utils.UIUtils;
 
 public abstract class MyRecyclerView {
 
-    private XRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout srfRefresh;
     private RecyclerView.LayoutManager manager;
     private RecyclerView.Adapter adapter;
     private View view;
@@ -30,53 +32,48 @@ public abstract class MyRecyclerView {
     private void initView() {
         view = UIUtils.inflate(R.layout.fragment_base);
 
-        mRecyclerView = (XRecyclerView) view.findViewById(R.id.rv_list);
+        srfRefresh = (SwipeRefreshLayout) view.findViewById(R.id.srf_refresh);
+        srfRefresh.setColorSchemeColors(UIUtils.getColor(R.color.colorSplash));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_list);
 
         mRecyclerView.setLayoutManager(manager);
 
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallRotate);
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.SemiCircleSpin);
-
         mRecyclerView.setAdapter(adapter);
 
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(UIUtils.getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                MyRecyclerView.this.onItemClick(view, position);
-            }
-        }));
-
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        srfRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 ThreadManager.getThreadPool().execute(new Runnable() {
                     @Override
                     public void run() {
                         MyRecyclerView.this.onRefresh();
+                        UIUtils.runOnUIThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                srfRefresh.setRefreshing(false);
+                            }
+                        });
                     }
                 });
-                mRecyclerView.refreshComplete();
-            }
-
-            @Override
-            public void onLoadMore() {
-                ThreadManager.getThreadPool().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        MyRecyclerView.this.onLoadMore();
-                    }
-                });
-                mRecyclerView.loadMoreComplete();
             }
         });
-    }
 
-    /**
-     * RecyclerView的item点击回调，由子类实现
-     * @param view
-     * @param position
-     */
-    public abstract void onItemClick(View view, int position);
+        LoadMoreWrapper.with(adapter)
+                .setShowNoMoreEnabled(true)
+
+                .setListener(new LoadMoreAdapter.OnLoadMoreListener() {
+                    @Override
+                    public void onLoadMore(LoadMoreAdapter.Enabled enabled) {
+                        ThreadManager.getThreadPool().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                MyRecyclerView.this.onLoadMore();
+                            }
+                        });
+                    }
+                })
+                .into(mRecyclerView);
+    }
 
     /**
      * 刷新页面，由子类实现

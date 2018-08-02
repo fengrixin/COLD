@@ -16,7 +16,7 @@ public class ColdDBOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("create table cold (_id integer primary key autoincrement,title text unique,picUrl text,contentUrl,read integer,star integer)");
+        sqLiteDatabase.execSQL("create table cold (_id integer primary key autoincrement,title text unique,picUrl text,contentUrl,read integer)");
     }
 
     @Override

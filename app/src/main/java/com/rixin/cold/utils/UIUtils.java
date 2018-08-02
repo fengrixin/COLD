@@ -50,12 +50,12 @@ public class UIUtils {
      * @param dip
      * @return
      */
-    public static int dipTopx(float dip) {
+    public static int dip2px(float dip) {
         float density = getContext().getResources().getDisplayMetrics().density; //获得设备密度
         return (int) (dip * density + 0.5f);
     }
 
-    public static float pxTodip(int px) {
+    public static float px2dip(int px) {
         float density = getContext().getResources().getDisplayMetrics().density; //获得设备密度
         return px / density;
     }

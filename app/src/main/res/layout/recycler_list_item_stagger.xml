@@ -1,67 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:orientation="vertical"
-    app:cardBackgroundColor="@color/colorWhiteLittle"
-    app:cardCornerRadius="@dimen/dp_5"
-    app:cardElevation="@dimen/dp_4"
-    app:cardUseCompatPadding="true">
+    android:padding="@dimen/dp_4"
+    android:background="@drawable/sel_bg_white_gray"
+    android:layout_margin="@dimen/dp_5">
 
-    <RelativeLayout
-        android:padding="@dimen/dp_4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/iv_tabs_list_pic"
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="@dimen/dp_110"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/dp_5"
+        android:scaleType="fitXY"
+        android:src="@drawable/not_found" />
 
-        <ImageView
-            android:id="@+id/iv_tabs_list_pic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_thumb_bg" />
-
-        <TextView
-            android:id="@+id/tv_tabs_list_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/iv_tabs_list_pic"
-            android:layout_marginLeft="@dimen/dp_4"
-            android:layout_marginRight="@dimen/dp_6"
-            android:layout_marginTop="@dimen/dp_6"
-            android:textColor="#424242"
-            android:text="@string/my_name"
-            android:textSize="@dimen/sp_16" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_tabs_list_title"
-            android:layout_margin="@dimen/dp_4"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_tabs_list_reader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="阅读(212)"
-                android:textColor="#BDBDBD"
-                android:textSize="@dimen/sp_10" />
-
-            <TextView
-                android:id="@+id/tv_tabs_list_star"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:text="赞(121)"
-                android:textColor="#BDBDBD"
-                android:textSize="@dimen/sp_10" />
-        </LinearLayout>
+    <TextView
+        android:id="@+id/tv_tabs_list_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_tabs_list_pic"
+        android:layout_marginLeft="@dimen/dp_8"
+        android:layout_marginRight="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_5"
+        android:textColor="#424242"
+        android:textSize="@dimen/sp_16" />
 
 
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_tabs_list_reader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_tabs_list_title"
+        android:layout_margin="@dimen/dp_8"
+        android:textColor="#BDBDBD"
+        android:textSize="@dimen/sp_10" />
 
-</android.support.v7.widget.CardView>
+</RelativeLayout>

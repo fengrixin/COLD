@@ -39,48 +39,6 @@ public class CacheUtils {
     }
 
     /**
-     * 获取每日一冷的缓存，并对其内容进行解析，返回ColdDetailsInfo对象
-     *
-     * @return
-     */
-    public static ColdDetailsInfo getEverydayCache() {
-        ColdDetailsInfo detailsInfo = null;
-        File cacheDir = UIUtils.getContext().getCacheDir();  // 获取缓存目录
-        File cacheFile = new File(cacheDir, GlobalConstants.EVERYDAY_CACHE_KEY);  //获得缓存文件
-        if (cacheFile.exists()) {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(cacheFile));
-                StringBuffer sb = new StringBuffer();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-                String str = sb.toString();
-                if (str == null || str == "" || str.isEmpty()) {
-                    return null;
-                }
-                detailsInfo = new ColdDetailsInfo();
-                String[] strs = str.split("-IOU-");
-                if (strs.length == 7) {
-                    detailsInfo.title = strs[0];
-                    detailsInfo.picUrl = strs[1];
-                    detailsInfo.pContent = strs[2];
-                    detailsInfo.prevUrl = strs[3];
-                    detailsInfo.nextUrl = strs[4];
-                    detailsInfo.read = Integer.parseInt(strs[5]);
-                    detailsInfo.star = Integer.parseInt(strs[6]);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                IOUtils.close(reader);
-            }
-        }
-        return detailsInfo;
-    }
-
-    /**
      * 获取缓存
      *
      * @param cacheFileName
@@ -101,12 +59,11 @@ public class CacheUtils {
                     ColdInfo info = new ColdInfo();
                     String[] strs = line.split("-IOU-");
                     for (int i = 0; i < strs.length; i++) {
-                        info.id = strs[0];
-                        info.title = strs[1];
-                        info.picUrl = strs[2];
-                        info.contentUrl = strs[3];
-                        info.readCount = Integer.parseInt(strs[4]);
-                        info.starCount = Integer.parseInt(strs[5]);
+                        info.setId(strs[0]);
+                        info.setTitle(strs[1]);
+                        info.setPicUrl(strs[2]);
+                        info.setContentUrl(strs[3]);
+                        info.setReadCount(Integer.parseInt(strs[4]));
                     }
                     data.add(info);
                 }

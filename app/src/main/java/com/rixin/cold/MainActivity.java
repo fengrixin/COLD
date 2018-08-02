@@ -1,13 +1,17 @@
 package com.rixin.cold;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,8 +36,7 @@ import com.rixin.cold.fragment.FragmentFactory;
 import com.rixin.cold.utils.InviteCommentUtil;
 import com.rixin.cold.utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
-
-import sw.ls.ps.normal.video.VideoAdManager;
+import com.umeng.message.PushAgent;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,9 +55,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PushAgent.getInstance(this).onAppStart();
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar_base);
         mToolbar.setTitle("");
-//        mToolbar.setTitle(getApplicationMetaValue("COLD_CHANNEL"));  // 显示当前渠道名称
         setSupportActionBar(mToolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -66,36 +72,15 @@ public class MainActivity extends AppCompatActivity
         headerView = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // 预加载数据（视频广告）
-        preloadData();
 
         initView();
     }
 
-//    /**
-//     *  获取当前渠道名称
-//     * @param name
-//     * @return
-//     */
-//    private String  getApplicationMetaValue(String name) {
-//        String value= "";
-//        try {
-//            ApplicationInfo appInfo =getPackageManager()
-//                    .getApplicationInfo(getPackageName(),
-//                            PackageManager.GET_META_DATA);
-//            value = appInfo.metaData.getString(name);
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        return value;
-//    }
-
     private void initView() {
-
         //获取当前时间
         firstTime = System.currentTimeMillis();
 
-        /** 显示当前版本号 */
+        /** 显示当前版本号和渠道号 */
         mUserIcon = (ImageView) headerView.findViewById(R.id.iv_userIcon);
         mUserIcon.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -126,17 +111,23 @@ public class MainActivity extends AppCompatActivity
         /** 邀请好评 */
         InviteCommentUtil.startCommet(this, false);
 
+        if (Build.VERSION.SDK_INT >= 23) {
+            String[] mPermissionList = new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.READ_LOGS,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,};
+            ActivityCompat.requestPermissions(this, mPermissionList, 123);
+        }
     }
 
-
-    /**
-     * 预加载数据
-     */
-    private void preloadData() {
-        // 设置服务器回调 userId，一定要在请求广告之前设置，否则无效
-        VideoAdManager.getInstance(UIUtils.getContext()).setUserId("userId");
-        // 请求视频广告
-        VideoAdManager.getInstance(UIUtils.getContext()).requestVideoAd(UIUtils.getContext());
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            Toast.makeText(this, "禁用这些权限可能会导致分享功能异常哦~~", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -150,14 +141,14 @@ public class MainActivity extends AppCompatActivity
             mViewPager.setVisibility(View.VISIBLE);
 
             // 设置Toolbar可滑动
-            AppBarLayout.LayoutParams params = new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, UIUtils.dipTopx(46));
+            AppBarLayout.LayoutParams params = new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, UIUtils.dip2px(46));
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
             mToolbar.setLayoutParams(params);
         } else {
             mTabs.setVisibility(View.GONE);
             mViewPager.setVisibility(View.GONE);
             // 设置Toolbar不可滑动
-            AppBarLayout.LayoutParams params = new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, UIUtils.dipTopx(46));
+            AppBarLayout.LayoutParams params = new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, UIUtils.dip2px(46));
             params.setScrollFlags(0);
             mToolbar.setLayoutParams(params);
         }
@@ -187,17 +178,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // 退出应用时调用，用于释放资源
-        // 如果无法保证应用主界面的 onDestroy() 方法被执行到，请移动以下接口到应用的退出逻辑里面调用
-
-        // 插屏广告（包括普通插屏广告、轮播插屏广告、原生插屏广告）
-//        SpotManager.getInstance(UIUtils.getContext()).onAppExit();
-        // 视频广告（包括普通视频广告、原生视频广告）
-        VideoAdManager.getInstance(UIUtils.getContext()).onAppExit();
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -262,6 +242,8 @@ public class MainActivity extends AppCompatActivity
             toActivity(UIUtils.getString(R.string.nav_collect), 0);
         } else if (id == R.id.nav_sponsor) {
             toActivity(UIUtils.getString(R.string.nav_sponsor), 1);
+        } else if (id == R.id.nav_apps) {
+            Snackbar.make(getWindow().getDecorView(), "暂无推荐应用，敬请期待~", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
         } else if (id == R.id.nav_discus) {
             InviteCommentUtil.startCommet(this, true);
         }

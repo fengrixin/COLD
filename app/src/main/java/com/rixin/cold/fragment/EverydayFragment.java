@@ -1,8 +1,11 @@
 package com.rixin.cold.fragment;
 
+import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -12,7 +15,7 @@ import com.rixin.cold.R;
 import com.rixin.cold.domain.ColdDetailsInfo;
 import com.rixin.cold.global.GlobalConstants;
 import com.rixin.cold.utils.CacheUtils;
-import com.rixin.cold.utils.RandomUtils;
+import com.rixin.cold.utils.Logger;
 import com.rixin.cold.utils.SPUtils;
 import com.rixin.cold.utils.UIUtils;
 import com.rixin.cold.widget.LoadingPage;
@@ -23,7 +26,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
- * 每日一冷
+ * 开屏即冷
  * Created by 飘渺云轩 on 2017/2/5.
  */
 
@@ -39,7 +42,6 @@ public class EverydayFragment extends BaseFragment {
     private RelativeLayout mShow;
     private TextView mTime;
     private TextView mRead;
-    private TextView mStar;
 
     // 当前要显示的页面
     private final static int SUCCESS = 0;
@@ -58,17 +60,14 @@ public class EverydayFragment extends BaseFragment {
         mContent = (TextView) view.findViewById(R.id.tv_everyday_content);
         mTime = (TextView) view.findViewById(R.id.tv_everyday_time);
         mRead = (TextView) view.findViewById(R.id.tv_everyday_read);
-        mStar = (TextView) view.findViewById(R.id.tv_everyday_star);
 
         if (mDetailsInfo != null) {
-            Glide.with(UIUtils.getContext()).load(mDetailsInfo.picUrl).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ic_thumb_bg).into(mPic);
-            mTitle.setText(mDetailsInfo.title + "?");
-            mContent.setText(Html.fromHtml(mDetailsInfo.pContent));
+            Glide.with(UIUtils.getContext()).load(mDetailsInfo.getPicUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ic_thumb_bg).into(mPic);
+            mTitle.setText(mDetailsInfo.getTitle() + "?");
+            mContent.setText(Html.fromHtml(mDetailsInfo.getpContent() == null ? "" : mDetailsInfo.getpContent()));
             mTextArrow.setText("展开");
             mTime.setText("发布时间：" + getCurrentDate());
-            mRead.setText("阅读(" + mDetailsInfo.read + ")");
-            mStar.setText("赞(" + mDetailsInfo.star + ")");
-
+            mRead.setText("阅读(" + mDetailsInfo.getRead() + ")");
             mShow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -83,22 +82,8 @@ public class EverydayFragment extends BaseFragment {
     @Override
     public LoadingPage.ResultState onLoadData() {
 
-        String beforeTime = SPUtils.getString(UIUtils.getContext(), GlobalConstants.BEFORE_TIME_KEY, getCurrentDate());
-        // 判断当前日期和上次打开的日期是否一致，如果不一致则加载下一篇文章
-        if (!beforeTime.equals(getCurrentDate())) {
-            SPUtils.setString(UIUtils.getContext(), GlobalConstants.BEFORE_TIME_KEY, getCurrentDate());
-            // 加载下一篇图文的服务器数据
-            mDetailsInfo = getServiceData();
-        } else {
-            // 首先加载缓存，如果缓存为空，则访问网络
-            mDetailsInfo = CacheUtils.getEverydayCache();
-            if (mDetailsInfo == null) {
-                // 加载服务器的数据
-                mDetailsInfo = getServiceData();
-            } else {
-                currentState = SUCCESS;
-            }
-        }
+        // 加载下一篇图文的服务器数据
+        mDetailsInfo = getServiceData();
 
         // 加载对应的页面
         if (currentState == SUCCESS) {
@@ -123,7 +108,7 @@ public class EverydayFragment extends BaseFragment {
             mArrowPic.setImageResource(R.drawable.ic_arrow_up);
             mTextArrow.setText("收起");
         }
-}
+    }
 
     /**
      * 访问网页获取数据
@@ -134,43 +119,41 @@ public class EverydayFragment extends BaseFragment {
         ColdDetailsInfo detailsInfo = new ColdDetailsInfo();
         try {
             // 从一个URL加载一个Document对象
-            document = nextImageText(SPUtils.getString(UIUtils.getContext(), GlobalConstants.EVERYDAY_NEXT_URL_KEY, GlobalConstants.EVERYDAY_SERVICE_URL));
+            document = nextImageText(SPUtils.getString(UIUtils.getContext(), GlobalConstants.EVERYDAY_CURRENT_URL_KEY, GlobalConstants.EVERYDAY_SERVICE_URL));
             if (document != null) {
                 currentState = SUCCESS;
                 // 选择标题所在节点
-                Element element = document.select(".article-title").first();
-                detailsInfo.title = element.select("a").text();
+                Element element = document.select("#title").first();
+                detailsInfo.setTitle(element.select("h1").text());
                 // 选择图片所在节点
-                element = document.select("article img").first();
-                detailsInfo.picUrl = element.attr("src");
+                element = document.select("#neir img").first();
+                detailsInfo.setPicUrl(element.attr("src"));
                 // 选择内容所在节点
-                Elements elements = document.select("article > p");
-                if (elements.size() == 1) {
-                    elements = document.select("article > div");
-                }
+                Elements elements = document.select("#neir p");
                 StringBuffer sb = new StringBuffer();
-                for (int i = 1; i < elements.size() - 1; i++) {
+                for (int i = 1; i < elements.size(); i++) {
                     if (elements.get(i).html().contains("&nbsp;")) {
                         continue;
                     }
                     sb.append("\u3000\u3000" + elements.get(i).html() + "<br/><br/>");
                 }
-                detailsInfo.pContent = sb.toString();
+                detailsInfo.setpContent(sb.toString());
+                // 选择阅读数所在节点
+                String str = document.select("#title em").text();
+                String[] splits = str.split("\\|");
+                String[] reads = splits[splits.length - 1].split("个");
+                detailsInfo.setRead(Integer.parseInt(reads[0].trim()) + 100);
                 // 选择上一篇所在的节点
-                element = document.select(".article-nav-prev a").first();
+                element = document.select("#sx span a").first();
                 if (element != null) {
-                    detailsInfo.prevUrl = element.attr("href");
+                    detailsInfo.setPrevUrl(element.attr("href"));
                 }
                 // 选择下一篇所在的节点
-                element = document.select(".article-nav-next a").first();
-                detailsInfo.nextUrl = element.attr("href");
-                // 设置阅读数
-                detailsInfo.read = RandomUtils.getReadRandom();
-                // 设置赞数
-                detailsInfo.star = RandomUtils.getStarRandom();
+                element = document.select(".sx-r a").first();
+                detailsInfo.setNextUrl(element.attr("href"));
 
                 // 存储下一篇的URL
-                SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_NEXT_URL_KEY, detailsInfo.nextUrl);
+                SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_CURRENT_URL_KEY, detailsInfo.getNextUrl());
                 // 写缓存
                 CacheUtils.setCache(GlobalConstants.EVERYDAY_CACHE_KEY, detailsInfo.toString());
             }
@@ -191,11 +174,11 @@ public class EverydayFragment extends BaseFragment {
     private Document nextImageText(String url) {
         try {
             Document d = Jsoup.connect(url).get();
-            Element element = d.select("article img").first();
+            Element element = d.select("#neir img").first();
             if (element == null) {
-                Element next = d.select(".article-nav-next").first();
+                Element next = d.select(".sx-r").first();
                 String nextUrl = next.select("a").attr("href");
-                SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_NEXT_URL_KEY, nextUrl);
+                SPUtils.setString(UIUtils.getContext(), GlobalConstants.EVERYDAY_CURRENT_URL_KEY, nextUrl);
                 d = nextImageText(nextUrl);
             }
             return d;

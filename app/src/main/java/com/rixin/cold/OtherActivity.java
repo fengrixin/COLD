@@ -11,6 +11,7 @@ import com.rixin.cold.fragment.others.SponsorFragment;
 import com.rixin.cold.fragment.others.StarFragment;
 import com.rixin.cold.utils.UIUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 public class OtherActivity extends AppCompatActivity {
 
@@ -20,6 +21,8 @@ public class OtherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other);
+
+        PushAgent.getInstance(this).onAppStart();
 
         /** 设置Toolbar */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_other);

@@ -36,24 +36,8 @@ public class AstronomyFragment extends BaseFragment {
     @Override
     public View onCreateSuccessPage() {
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL);
-        mAdapter = new TabsRecyclerViewAdapter(mData, R.layout.recycler_list_item_stagger);
+        mAdapter = new TabsRecyclerViewAdapter(UIUtils.getContext(), mData, R.layout.recycler_list_item_stagger);
         MyRecyclerView myRecyclerView = new MyRecyclerView(manager, mAdapter) {
-
-            @Override
-            public void onItemClick(View view, int position) {
-                String readIds = SPUtils.getString(UIUtils.getContext(), "readIds", "");
-                // 没有 id 才追加，避免重复
-                if (!readIds.contains(mData.get(position - 1).id + "")) {
-                    readIds = readIds + mData.get(position - 1).id + ",";
-                    SPUtils.setString(UIUtils.getContext(), "readIds", readIds);
-                }
-                // 局部刷新
-                TextView tvTitle = (TextView) view.findViewById(R.id.tv_tabs_list_title);
-                tvTitle.setTextColor(Color.rgb(189, 189, 189));
-
-                // 跳转详情页
-                toDetailsPage(mData.get(position - 1).contentUrl, mData.get(position - 1).readCount, mData.get(position - 1).starCount);
-            }
 
             @Override
             public void onRefresh() {
@@ -90,7 +74,7 @@ public class AstronomyFragment extends BaseFragment {
                                 Snackbar.make(getView(), "到底了哦，请移步其他分类阅读...",Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                             }
                             currentSize = mData.size();
-                            mAdapter.setDataChangeListener(mData);
+                            mAdapter.notifyDataSetChanged();
                         }
                     });
                 } else {

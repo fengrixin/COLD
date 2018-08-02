@@ -12,7 +12,7 @@ import com.rixin.cold.utils.UIUtils;
 
 /**
  * 根据当前状态来显示不同页面的自定义控件
- *
+ * <p>
  * -未加载  -加载中  -加载失败  -加载成功
  * Created by 飘渺云轩 on 2017/2/5.
  */
@@ -56,7 +56,7 @@ public abstract class LoadingPage extends FrameLayout {
                 @Override
                 public void onClick(View view) {
                     // 判断当前网络是否可用，如果可用就重新加载
-                    if(NetworkUtils.isNetworkConnected(UIUtils.getContext())) {
+                    if (NetworkUtils.isNetworkConnected(UIUtils.getContext())) {
                         loadData();
                     }
                 }
@@ -67,6 +67,9 @@ public abstract class LoadingPage extends FrameLayout {
         showRightPage();
     }
 
+    /**
+     * 显示对应状态的页面
+     */
     private void showRightPage() {
         loadingPage.setVisibility((currentState == STATE_LOAD_UNDO || currentState == STATE_LOAD_LOADING) ? View.VISIBLE : View.GONE);
         errorPage.setVisibility(currentState == STATE_LOAD_FAILURE ? View.VISIBLE : View.GONE);
