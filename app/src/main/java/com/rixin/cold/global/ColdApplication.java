@@ -34,7 +34,7 @@ public class ColdApplication extends Application {
         UMConfigure.init(this, "58d8c5d82ae85b642400166f", "umeng", UMConfigure.DEVICE_TYPE_PHONE, "825e358b2eb36f17dd55796f717f8ef3");
 
         // 分享配置
-        PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+        PlatformConfig.setWeixin("wx57ec1d12b3bb8585", "a2fc2a8721766f8a79b872279e4adfd3");
         PlatformConfig.setQQZone("1106083912", "ydv0Ij2tHKMTSnb1");
 
         // 推送配置

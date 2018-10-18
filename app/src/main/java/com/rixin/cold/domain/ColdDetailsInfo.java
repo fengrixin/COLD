@@ -8,6 +8,7 @@ package com.rixin.cold.domain;
 public class ColdDetailsInfo {
 
     private String title;  // 标题
+    private String url; // 当前 url
     private String picUrl;  // 图片URL
     private String pContent; // 内容
     private String prevUrl;  // 上一篇URL
@@ -20,6 +21,14 @@ public class ColdDetailsInfo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getPicUrl() {

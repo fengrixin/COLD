@@ -58,7 +58,7 @@ public class TabsRecyclerViewAdapter extends RecyclerView.Adapter<TabsRecyclerVi
     @Override
     public void onBindViewHolder(final TabsViewHolder holder, final int position) {
         Glide.with(UIUtils.getContext()).load(data.get(position).getPicUrl())
-                .bitmapTransform(new RoundedCornersTransformation(UIUtils.getContext(), UIUtils.dip2px(8), 0))
+                .bitmapTransform(new RoundedCornersTransformation(UIUtils.getContext(), UIUtils.dip2px(7), 0))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.not_found)  // 默认图片
                 .into(holder.pic);

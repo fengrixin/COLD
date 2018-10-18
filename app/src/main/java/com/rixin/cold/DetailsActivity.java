@@ -79,7 +79,7 @@ public class DetailsActivity extends AppCompatActivity {
                     // TODO 分享
                     UMWeb web = new UMWeb(url, title, des, new UMImage(DetailsActivity.this, thumb));
                     new ShareAction(DetailsActivity.this).withMedia(web)
-                            .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.QQ)
+                            .setDisplayList(SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.QQ)
                             .setCallback(new UMShareListener() {
                                 @Override
                                 public void onStart(SHARE_MEDIA share_media) {

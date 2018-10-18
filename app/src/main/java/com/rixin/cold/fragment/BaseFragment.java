@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.rixin.cold.DetailsActivity;
 import com.rixin.cold.domain.ColdInfo;
 import com.rixin.cold.global.GlobalConstants;
+import com.rixin.cold.utils.Logger;
 import com.rixin.cold.utils.UIUtils;
 import com.rixin.cold.widget.LoadingPage;
 import com.umeng.analytics.MobclickAgent;
@@ -113,11 +114,11 @@ public abstract class BaseFragment extends Fragment {
         try {
             Document document = Jsoup.connect(url).get();
             if (document != null) {
-                Elements elements = document.select(".post");
+                Elements elements = document.select(".post .zi");
                 if (elements != null) {
                     for (Element element : elements) {
                         ColdInfo info = new ColdInfo();
-                        String contentUrl = element.select(".zi a").attr("href");
+                        String contentUrl = element.select("a").attr("href");
                         String[] strs = contentUrl.split("post/");
                         info.setId(strs[1]);
                         info.setTitle(element.select(".zi h2").text());
